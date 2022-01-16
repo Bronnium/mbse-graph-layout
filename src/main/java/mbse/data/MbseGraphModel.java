@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.LinkedList;
+import jdk.jfr.internal.LogLevel;
+import jdk.jfr.internal.LogTag;
+import jdk.jfr.internal.Logger;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -263,8 +266,7 @@ public class MbseGraphModel extends mxGraph {
 						});*/
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.log(LogTag.JFR_EVENT, LogLevel.DEBUG, e.getMessage());
 		}
 
 		
