@@ -32,7 +32,7 @@ public class MbseGraphModel extends mxGraph {
 	/*
 	 * Probably the constructor to use
 	 */
-	public MbseGraphModel(LinkedList vertexList, LinkedList edgeList, MbseLayout layout) {
+	public MbseGraphModel(LinkedList vertexList, LinkedList edgeList, mxGraphLayout layout) {
 		this(vertexList, edgeList);
 		
 		appliedLayout = layout;
