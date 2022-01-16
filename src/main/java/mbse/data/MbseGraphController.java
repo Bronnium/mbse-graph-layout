@@ -10,7 +10,6 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.mxGraphComponent.mxGraphControl;
 
@@ -26,9 +25,7 @@ public class MbseGraphController {
 	private String[] availableLayouts = new String[] {"Effective Java", "Head First Java",
 			"Thinking in Java", "Java for Dummies"};
 	private MouseListener mouseListener;
-	private mxCell selectedCell;
-	//private LinkedList availableLayouts;
-
+	
 	public MbseGraphController(MbseGraphModel mbseGraphModel, MbseGraphView mbseGraphView) {
 		model = mbseGraphModel;
 		view = mbseGraphView;
@@ -37,7 +34,7 @@ public class MbseGraphController {
 		view.addMbseGraphComponent(model);
 		addViewControls();
 		for (String item : availableLayouts) {
-			view.getLayoutSelection().addItem(item);
+			//view.getLayoutSelection().addItem(item);
 		}
 
 	}
@@ -117,7 +114,7 @@ public class MbseGraphController {
 			mxGraphComponent graphComponent = graphControl.getGraphContainer();
 			if (graphComponent.getGraph().getSelectionCell() != null)
 			{
-				selectedCell = (mxCell) graphComponent.getGraph().getSelectionCell();
+				//selectedCell = (mxCell) graphComponent.getGraph().getSelectionCell();
 				view.displayPopupMenu(e.getX(), e.getY());
 			}
 			else
@@ -141,7 +138,7 @@ public class MbseGraphController {
 			if (slider.getValueIsAdjusting())
 				return;
 
-			int spacing = slider.getValue();
+			//int spacing = slider.getValue();
 
 			if (slider.getName().equals("HorizontalSpacing")) 
 			{
