@@ -6,7 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JMenuItem;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -43,6 +42,9 @@ public class MbseGraphController {
 
 	}
 
+	/**
+	 * Display the user interface
+	 */
 	public void displayView() {
 		model.getAppliedLayout().execute(model.getDefaultParent());
 
@@ -144,12 +146,12 @@ public class MbseGraphController {
 			if (slider.getName().equals("HorizontalSpacing")) 
 			{
 				//((MbseLayout) currentAppliedLayout).setHorizontalSpacing(spacing);
-				model.getAppliedLayout().setHorizontalSpacing(spacing);
+				//model.getAppliedLayout().setHorizontalSpacing(spacing);
 
 			}
 			else // verticalSpacing
 			{
-				model.getAppliedLayout().setVerticalSpacing(spacing);
+				//model.getAppliedLayout().setVerticalSpacing(spacing);
 				//((MbseLayout) currentAppliedLayout).setVerticalSpacing(spacing);
 			}
 

@@ -20,10 +20,12 @@ import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
+import com.mxgraph.layout.mxCompactTreeLayout;
+import com.mxgraph.layout.mxGraphLayout;
 
 public class MbseGraphModel extends mxGraph {
 
-	protected MbseLayout appliedLayout;
+	protected mxGraphLayout appliedLayout;
 	private StyleMap MBSEstyles;
 	public Object saveForLater;
 
@@ -171,7 +173,47 @@ public class MbseGraphModel extends mxGraph {
 
 	}
 	
-	private void styleHandler() {
+	/**
+	 * Model - basic data
+	 */
+	public MbseGraphModel() {
+		super();
+
+		appliedLayout = new mxCompactTreeLayout(this, false);
+
+		getModel().beginUpdate();
+        try
+        {           
+            Object root = insertVertex(null, "treeRoot", "Root", 0, 0, 60, 40);
+            Object v1 = insertVertex(null, "v1", "Child 1", 0, 0, 60, 40);
+            insertEdge(null, null, "", root, v1);
+			Object v2 = insertVertex(null, "v2", "Child 2", 0, 0, 60, 40);
+            insertEdge(null, null, "", root, v2);
+            Object v3 = insertVertex(null, "v3", "Child 3", 0, 0, 60, 40);
+            insertEdge(null, null, "", root, v3);
+            Object v11 = insertVertex(null, "v11", "Child 1.1", 0, 0, 60, 40);
+            insertEdge(null, null, "", v1, v11);
+            Object v12 = insertVertex(null, "v12", "Child 1.2", 0, 0, 60, 40);
+            insertEdge(null, null, "", v1, v12);
+            Object v21 = insertVertex(null, "v21", "Child 2.1", 0, 0, 60, 40);
+            insertEdge(null, null, "", v2, v21);
+            Object v22 = insertVertex(null, "v22", "Child 2.2", 0, 0, 60, 40);
+            insertEdge(null, null, "", v2, v22);
+            Object v221 = insertVertex(null, "v221", "Child 2.2.1", 0, 0, 60, 40);
+            insertEdge(null, null, "", v22, v221);
+            Object v222 = insertVertex(null, "v222", "Child 2.2.2", 0, 0, 60, 40);
+            insertEdge(null, null, "", v22, v222);
+            Object v31 = insertVertex(null, "v31", "Child 3.1", 0, 0, 60, 40);
+            insertEdge(null, null, "", v3, v31);
+        }
+        finally
+        {
+            getModel().endUpdate();
+        }
+
+    }
+
+    private void styleHandler() {
 		URL file = getClass().getResource("styles.xml");
 		System.out.println(file);
 		String filename = file.getPath();
@@ -233,11 +275,11 @@ public class MbseGraphModel extends mxGraph {
 		return ((mxGraphModel)(getModel())).getCell(GUID);
 	}
 
-	public MbseLayout getAppliedLayout() {
+	public mxGraphLayout getAppliedLayout() {
 		return appliedLayout;
 	}
 
-	public void setAppliedLayout(MbseLayout appliedLayout) {
+	public void setAppliedLayout(mxGraphLayout appliedLayout) {
 		this.appliedLayout = appliedLayout;
 	}
 
