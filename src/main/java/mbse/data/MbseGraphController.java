@@ -21,9 +21,6 @@ public class MbseGraphController {
 	private ActionListener actionListener;
 	private ChangeListener changeListener;
 
-
-	private String[] availableLayouts = new String[] {"Effective Java", "Head First Java",
-			"Thinking in Java", "Java for Dummies"};
 	private MouseListener mouseListener;
 	
 	public MbseGraphController(MbseGraphModel mbseGraphModel, MbseGraphView mbseGraphView) {
@@ -33,9 +30,10 @@ public class MbseGraphController {
 
 		view.addMbseGraphComponent(model);
 		addViewControls();
-		for (String item : availableLayouts) {
-			//view.getLayoutSelection().addItem(item);
+		for (String item : model.availableLayouts) {
+			view.getLayoutSelection().addItem(item);
 		}
+		view.resizeCombox();
 
 	}
 
@@ -71,7 +69,6 @@ public class MbseGraphController {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
 				rightClickMenu(e);
 			}
 			/*

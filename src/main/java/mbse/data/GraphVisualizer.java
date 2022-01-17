@@ -1,21 +1,22 @@
 package mbse.data;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.UIManager;
 
-import jdk.jfr.internal.LogLevel;
-import jdk.jfr.internal.LogTag;
-import jdk.jfr.internal.Logger;
-
 public class GraphVisualizer {
+	private static final Logger log = Logger.getLogger(GraphVisualizer.class.getName());
+
 	public static void main(String[] args) {
 
 		try
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		}
-		catch (Exception e1)
+		catch (Exception e)
 		{
-			Logger.log(LogTag.JFR_EVENT, LogLevel.DEBUG, e1.getMessage());
+			log.log(Level.SEVERE, "Failed set look and feel user interface.", e);
 		}
 		
 		// create an instance of a MBSE model

@@ -1,6 +1,5 @@
 package mbse.data;
 
-import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Hashtable;
@@ -15,14 +14,10 @@ import org.w3c.dom.NodeList;
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGraphModel;
-import com.mxgraph.model.mxGraphModel.mxStyleChange;
-import com.mxgraph.shape.mxStencil;
-import com.mxgraph.shape.mxStencilRegistry;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxUtils;
 import com.mxgraph.util.mxXmlUtils;
 import com.mxgraph.view.mxGraph;
-import com.mxgraph.view.mxStylesheet;
 import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.layout.mxGraphLayout;
 
@@ -31,6 +26,9 @@ public class MbseGraphModel extends mxGraph {
 	protected mxGraphLayout appliedLayout;
 	private StyleMap MBSEstyles;
 	public Object saveForLater;
+
+    public String[] availableLayouts = new String[] {"Effective Java", "Head First Java",
+    "Thinking in Java", "Java for Dummies"};
 
 	/*
 	 * Probably the constructor to use
@@ -182,6 +180,7 @@ public class MbseGraphModel extends mxGraph {
 	public MbseGraphModel() {
 		super();
 
+        //this.setCellsEditable(false);
 		appliedLayout = new mxCompactTreeLayout(this, false);
 
 		getModel().beginUpdate();
