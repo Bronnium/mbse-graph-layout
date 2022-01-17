@@ -8,9 +8,7 @@ import jdk.jfr.internal.LogLevel;
 import jdk.jfr.internal.LogTag;
 import jdk.jfr.internal.Logger;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+
 
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxGraphModel;
@@ -30,20 +28,10 @@ public class MbseGraphModel extends mxGraph {
     public String[] availableLayouts = new String[] {"Effective Java", "Head First Java",
     "Thinking in Java", "Java for Dummies"};
 
-	/*
-	 * Probably the constructor to use
-	 */
-	public MbseGraphModel(LinkedList vertexList, LinkedList edgeList, mxGraphLayout layout) {
-		this(vertexList, edgeList);
-		
-		appliedLayout = layout;
-
-	}
-
 	public MbseGraphModel(LinkedList<D2Element> vertexList, LinkedList<D2Line> edgeList) {
 		super();
 		
-		styleHandler();
+		
 		setAutoOrigin(true);
 		
 		Hashtable<String, Object> style = new Hashtable<String, Object>();
@@ -180,6 +168,15 @@ public class MbseGraphModel extends mxGraph {
 	public MbseGraphModel() {
 		super();
 
+        MbseGraphStyles mbseStyles = new MbseGraphStyles();
+        
+        Hashtable<String, Hashtable<String, Object>> styles = mbseStyles.getAvailableStyles();
+/*
+        styles.forEach(
+            (k,v) -> this.getStylesheet().putCellStyle(k, v);
+        );
+  */      
+
         //this.setCellsEditable(false);
 		appliedLayout = new mxCompactTreeLayout(this, false);
 
@@ -214,63 +211,6 @@ public class MbseGraphModel extends mxGraph {
         }
 
     }
-
-    private void styleHandler() {
-		URL file = getClass().getResource("styles.xml");
-		System.out.println(file);
-		String filename = file.getPath();
-		Document doc;
-		try {
-			doc = mxXmlUtils.parseXml(mxUtils.readFile(filename));
-			
-			Element styles = (Element) doc.getDocumentElement();
-			//Element shapes = (Element) doc.getDocumentElement();
-			NodeList list = styles.getElementsByTagName("style");
-
-			MBSEstyles = new StyleMap();
-			for (int i = 0; i < list.getLength(); i++)
-			{
-				Element nNode = (Element) list.item(i);
-				System.out.println("\nCurrent Element :" + nNode.getNodeName());
-				nNode.getAttributes();
-				System.out.println(nNode.getAttribute("name"));
-				MBSEstyles.addStyle(nNode.getAttribute("name"), nNode);
-				//String nameValue = shape.getAttribute("name");
-				//System.out.println(nameValue);
-				/*mxStencilRegistry.addStencil(shape.getAttribute("name"),
-						new mxStencil(shape)
-						{
-							protected mxGraphicsCanvas2D createCanvas(
-									final mxGraphics2DCanvas gc)
-							{
-								// Redirects image loading to graphics canvas
-								return new mxGraphicsCanvas2D(gc.getGraphics())
-								{
-									protected Image loadImage(String src)
-									{
-										// Adds image base path to relative image URLs
-										if (!src.startsWith("/")
-												&& !src.startsWith("http://")
-												&& !src.startsWith("https://")
-												&& !src.startsWith("file:"))
-										{
-											src = gc.getImageBasePath() + src;
-										}
-
-										// Call is cached
-										return gc.loadImage(src);
-									}
-								};
-							}
-						});*/
-			}
-		} catch (IOException e) {
-			Logger.log(LogTag.JFR_EVENT, LogLevel.DEBUG, e.getMessage());
-		}
-
-		
-		
-	}
 
 	protected Object getD2ElementByGUID(String GUID) {
 		return ((mxGraphModel)(getModel())).getCell(GUID);
