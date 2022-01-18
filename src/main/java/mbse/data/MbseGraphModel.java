@@ -168,6 +168,8 @@ public class MbseGraphModel extends mxGraph {
 	public MbseGraphModel() {
 		super();
 
+        
+
         MbseGraphStyles mbseStyles = new MbseGraphStyles();
         
         Hashtable<String, Hashtable<String, Object>> styles = mbseStyles.getAvailableStyles();
@@ -209,7 +211,6 @@ public class MbseGraphModel extends mxGraph {
         {
             getModel().endUpdate();
         }
-
     }
 
 	protected Object getD2ElementByGUID(String GUID) {

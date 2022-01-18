@@ -65,4 +65,8 @@ public class MbseGraphStyles {
             log.log(Level.SEVERE, "File not found.", e);
         }
     }
+
+    public String getContent() {
+        return fileContent;
+    }
 }
