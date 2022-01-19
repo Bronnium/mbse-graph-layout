@@ -26,6 +26,7 @@ import com.mxgraph.swing.mxGraphComponent;
 
 /**
  * Main class for MBSE Graph Visualization
+ * 
  * @author
  *
  */
@@ -38,8 +39,6 @@ public class MbseGraphView extends JFrame {
 	public void setLayoutSelection(JComboBox<Object> layoutSelection) {
 		this.layoutSelection = layoutSelection;
 	}
-	
-	
 
 	private JPanel contentPane;
 
@@ -54,18 +53,18 @@ public class MbseGraphView extends JFrame {
 	private JPopupMenu popupmenu;
 
 	private JComboBox<Object> layoutSelection;
-	
-	private JCheckBox changeStyle;
-	
+
+	public JCheckBox changeStyle;
+
 	private JMenuItem lock;
 
 	private JMenuItem displayAsLeaf;
-	
+
 	/**
 	 * Contains the path to icon that will be displayed in the frame.
 	 * Image file (png) shall be included in resources package
 	 */
-	private final String ICO_STRING ="/flow-chart.png";
+	private final String ICO_STRING = "/flow-chart.png";
 	private static final String FRAME_TITLE = "MBSE Graph Visualizer";
 
 	private final int FRAME_WIDTH = 800;
@@ -93,7 +92,7 @@ public class MbseGraphView extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		// set image on frame and OS toolbar
 		this.setIconImage(new ImageIcon(getClass().getResource(ICO_STRING)).getImage());
-		
+
 		initUI();
 	}
 
@@ -103,56 +102,56 @@ public class MbseGraphView extends JFrame {
 	private void initUI() {
 		// Construction et injection de la barre d'outils
 		contentPane = (JPanel) this.getContentPane();
-		
-        contentPane.add(createPopupMenu());
+
+		contentPane.add(createPopupMenu());
 
 		contentPane.add(createMainToolBar(), BorderLayout.NORTH);
 		contentPane.add(createSecondaryToolBar(), BorderLayout.EAST);
 	}
 
-
 	/**
 	 * Handling the popup menu on right click
+	 * 
 	 * @return Component
 	 */
 	private Component createPopupMenu() {
 		popupmenu = new JPopupMenu("Edit");
-        
+
 		displayAsLeaf = new JMenuItem("display as leafs");
-		displayAsLeaf.setIcon(new ImageIcon(getClass().getResource("/tree-structure.png"))); 
-        
-        lock = new JMenuItem("Lock / Unlock", new ImageIcon(getClass().getResource("/padlock.png")));
-        popupmenu.add(displayAsLeaf);
-        popupmenu.add(lock);
-        return popupmenu;
+		displayAsLeaf.setIcon(new ImageIcon(getClass().getResource("/tree-structure.png")));
+
+		lock = new JMenuItem("Lock / Unlock", new ImageIcon(getClass().getResource("/padlock.png")));
+		popupmenu.add(displayAsLeaf);
+		popupmenu.add(lock);
+		return popupmenu;
 	}
-	
+
 	private Component createSecondaryToolBar() {
-		JToolBar toolBar = new JToolBar("Layout Properties",JToolBar.VERTICAL);
+		JToolBar toolBar = new JToolBar("Layout Properties", JToolBar.VERTICAL);
 
 		// empeche la barre d'etre boug�e
 		toolBar.setFloatable(true);
 
 		toolBar.add(new JLabel("Set horizontal spacing"));
 
-		horizontalSpacingSlide = new JSlider(JSlider.HORIZONTAL,5,100,20);
+		horizontalSpacingSlide = new JSlider(JSlider.HORIZONTAL, 5, 100, 20);
 		horizontalSpacingSlide.setPaintTicks(true);
 		horizontalSpacingSlide.setPaintLabels(true);
 		horizontalSpacingSlide.setMinorTickSpacing(10);
 		horizontalSpacingSlide.setMajorTickSpacing(20);
 		horizontalSpacingSlide.setName("HorizontalSpacing");
-		//horizontalSpacingSlide.addChangeListener(changeListener);
+		// horizontalSpacingSlide.addChangeListener(changeListener);
 		toolBar.add(horizontalSpacingSlide);
 
 		toolBar.add(new JLabel("Set vertical spacing"));
 
-		verticalSpacingSlide = new JSlider(JSlider.HORIZONTAL,5,100,20);
+		verticalSpacingSlide = new JSlider(JSlider.HORIZONTAL, 5, 100, 20);
 		verticalSpacingSlide.setPaintTicks(true);
 		verticalSpacingSlide.setPaintLabels(true);
 		verticalSpacingSlide.setMinorTickSpacing(10);
 		verticalSpacingSlide.setMajorTickSpacing(20);
 		verticalSpacingSlide.setName("VerticalSpacing");
-		//verticalSpacingSlide.addChangeListener(changeListener);
+		// verticalSpacingSlide.addChangeListener(changeListener);
 		toolBar.add(verticalSpacingSlide);
 
 		toolBar.addSeparator();
@@ -170,49 +169,29 @@ public class MbseGraphView extends JFrame {
 		toolBar.setFloatable(false);
 
 		btnSelect = new JButton(new ImageIcon(getClass().getResource("/select.gif")));
-		//btnZoomIn.addActionListener(actionListener);
+		// btnZoomIn.addActionListener(actionListener);
 		toolBar.add(btnSelect);
 
 		btnPan = new JButton(new ImageIcon(getClass().getResource("/pan.gif")));
-		//btnZoomIn.addActionListener(actionListener);
+		// btnZoomIn.addActionListener(actionListener);
 		toolBar.add(btnPan);
 
 		toolBar.addSeparator();
 
 		btnZoomIn = new JButton(new ImageIcon(getClass().getResource("/zoomin.gif")));
-		//btnZoomIn.addActionListener(actionListener);
+		// btnZoomIn.addActionListener(actionListener);
 		toolBar.add(btnZoomIn);
 
 		btnZoomOut = new JButton(new ImageIcon(getClass().getResource("/zoomout.gif")));
-		//btnZoomOut.addActionListener(actionListener);
+		// btnZoomOut.addActionListener(actionListener);
 		toolBar.add(btnZoomOut);
 
 		btnZoomFit = new JButton(new ImageIcon(getClass().getResource("/zoomactual.gif")));
-		//btnZoomFit.addActionListener(actionListener);
+		// btnZoomFit.addActionListener(actionListener);
 		toolBar.add(btnZoomFit);
 		toolBar.addSeparator();
-		
+
 		changeStyle = new JCheckBox("UML Style");
-		ActionListener actionListener = new ActionListener() {
-		      public void actionPerformed(ActionEvent actionEvent) {
-		          AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
-		          boolean selected = abstractButton.getModel().isSelected();
-		          if(selected) {
-mxCell node = (mxCell) ((MbseGraphModel) graphComponent.getGraph()).saveForLater;
-		        	  
-		        	  graphComponent.getGraph().getModel().setStyle(node, "fillColor=#ffffff");
-		          }
-		          else {
-mxCell node = (mxCell) ((MbseGraphModel) graphComponent.getGraph()).saveForLater;
-		        	  
-		        	  graphComponent.getGraph().getModel().setStyle(node, "fillColor=#fff00f");
-		          }
-		          // abstractButton.setText(newLabel);
-		        	  //graphComponent.getGraph().getModel()
-		        	  
-		        }
-		      };
-		changeStyle.addActionListener(actionListener);
 		toolBar.add(changeStyle);
 		toolBar.addSeparator();
 
@@ -224,8 +203,8 @@ mxCell node = (mxCell) ((MbseGraphModel) graphComponent.getGraph()).saveForLater
 		toolBar.add(new JLabel("Select layout"));
 		layoutSelection = new JComboBox<Object>();
 		layoutSelection.setPreferredSize(layoutSelection.getPreferredSize());
-		
-		//layoutSelection
+
+		// layoutSelection
 		toolBar.add(layoutSelection);
 
 		return toolBar;
@@ -233,22 +212,22 @@ mxCell node = (mxCell) ((MbseGraphModel) graphComponent.getGraph()).saveForLater
 
 	public void addMbseGraphComponent(MbseGraphModel model) {
 		graphComponent = new mxGraphComponent(model);
-		
-		
-		
+
 		contentPane.add(graphComponent);
 	}
 
-	public void addInputControl(ActionListener actionListener, ChangeListener changeListener, MouseListener mouseListener) {
+	public void addInputControl(ActionListener actionListener, ChangeListener changeListener,
+			MouseListener mouseListener) {
 		graphComponent.getGraphControl().addMouseListener(mouseListener);
-		
+
 		btnZoomIn.addActionListener(actionListener);
-		
+		changeStyle.addActionListener(actionListener);
+
 		layoutSelection.addActionListener(actionListener);
-		
+
 		// right click menu
 		displayAsLeaf.addActionListener(actionListener);
-		
+
 		horizontalSpacingSlide.addChangeListener(changeListener);
 		verticalSpacingSlide.addChangeListener(changeListener);
 	}
@@ -258,8 +237,7 @@ mxCell node = (mxCell) ((MbseGraphModel) graphComponent.getGraph()).saveForLater
 	}
 
 	public void resizeCombox() {
-		//layoutSelection.setMaximumSize(layoutSelection.getPreferredSize());
+		// layoutSelection.setMaximumSize(layoutSelection.getPreferredSize());
 	}
-	
-	
+
 }
