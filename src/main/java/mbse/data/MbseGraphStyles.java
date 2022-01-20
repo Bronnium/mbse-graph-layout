@@ -59,6 +59,8 @@ public class MbseGraphStyles {
         String styleName = "";
         // an instance of factory that gives a document builder
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        // to be compliant, completely disable DOCTYPE declaration:
+        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
         // an instance of builder to parse the specified xml file
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(file);

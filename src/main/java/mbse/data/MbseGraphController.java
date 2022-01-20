@@ -176,16 +176,18 @@ public class MbseGraphController {
 			if (slider.getValueIsAdjusting())
 				return;
 
-			// int spacing = slider.getValue();
+			int spacing = slider.getValue();
 
 			if (slider.getName().equals("HorizontalSpacing")) {
 				// ((MbseLayout) currentAppliedLayout).setHorizontalSpacing(spacing);
 				// model.getAppliedLayout().setHorizontalSpacing(spacing);
+				System.out.println(spacing);
 
 			} else // verticalSpacing
 			{
 				// model.getAppliedLayout().setVerticalSpacing(spacing);
 				// ((MbseLayout) currentAppliedLayout).setVerticalSpacing(spacing);
+				System.out.println("vertical spacing");
 			}
 
 			model.getAppliedLayout().execute(model.getDefaultParent());
