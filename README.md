@@ -1,4 +1,4 @@
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Bronnium_mbse-graph-layout&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Bronnium_mbse-graph-layout)
+![example workflow](https://github.com/Bronnium/mbse-graph-layout/actions/workflows/build.yml/badge.svg) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Bronnium_mbse-graph-layout&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Bronnium_mbse-graph-layout)
 
 # mbse-graph-layout
 Useful tool for MBSE application
