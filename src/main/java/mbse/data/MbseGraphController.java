@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 import javax.swing.AbstractButton;
 import javax.swing.JCheckBox;
@@ -14,7 +12,6 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.mxGraphComponent.mxGraphControl;
 
@@ -59,14 +56,14 @@ public class MbseGraphController {
 				AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
 				boolean selected = abstractButton.getModel().isSelected();
 				if (selected) {
-					mxCell node = (mxCell) ((MbseGraphModel) model).saveForLater;
+					// mxCell node = (mxCell) ((MbseGraphModel) model).saveForLater;
 					// Object[] allEdge = model.getChildEdges(model.getDefaultParent());
 					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
 					System.out.println(allVertex.length);
 					model.setCellStyle("tom_sawyer", allVertex);
 					// model.getModel().setStyle(allEdge, "tom_sawyer");
 				} else {
-					mxCell node = (mxCell) ((MbseGraphModel) model).saveForLater;
+					// mxCell node = (mxCell) ((MbseGraphModel) model).saveForLater;
 					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
 					System.out.println(allVertex.length);
 					model.setCellStyle("saeml", allVertex);
@@ -229,7 +226,7 @@ public class MbseGraphController {
 		try {
 			// model.getcels
 			Object[] cells = new Object[] {};
-			cells[0] = model.saveForLater;
+			// cells[0] = model.saveForLater;
 
 			model.setCellStyle(model.getAppliedStyle(), cells);
 		} finally {

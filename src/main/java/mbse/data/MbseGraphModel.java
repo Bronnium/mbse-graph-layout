@@ -12,8 +12,6 @@ import com.mxgraph.view.mxGraph;
 public class MbseGraphModel extends mxGraph {
 
     protected mxGraphLayout appliedLayout;
-    private StyleMap MBSEstyles;
-    public Object saveForLater;
 
     private static String defaultStyle = "tom_sawyer";
 
@@ -57,21 +55,6 @@ public class MbseGraphModel extends mxGraph {
         this.getStylesheet().putCellStyle("imageTest", style);
         appliedLayout = new DefaultMbseLayout(this);
         // appliedLayout = new CallStackLayout(this);
-        /*
-         * //this.insertVertex(root, null, "TEST", 10, 10, 100, 100, "");
-         * for (D2Element element : vertexList) {
-         * // mxGraph.insertVertex(parent, id, value, x, y, width, height, style)
-         * insertVertex(defaultParent, element.getGuid(), element.getLabel(), 0, 0, 50,
-         * 30);
-         * }
-         * 
-         * for (D2Line line : edgeList) {
-         * //mxGraph.insertEdge(parent, id, value, source, target, style)
-         * Object source = getD2ElementByGUID(line.getSourceGUID());
-         * Object target = getD2ElementByGUID(line.getTargetGUID());
-         * insertEdge(defaultParent, line.getGuid(), line.label, source, target);
-         * }
-         */
         Object parent = getDefaultParent();
 
         Object root = insertVertex(parent, "treeRoot", "Root", 0, 0, 60, 40);
@@ -123,21 +106,11 @@ public class MbseGraphModel extends mxGraph {
         Object v11 = insertVertex(parent, "v11", "Child 1.1", 0, 0, 160, 140, "imageTest");
         insertEdge(parent, null, "", v1, v11);
 
-        String tom = MBSEstyles.getStyle("tom sawyer");
-        System.out.println("-->" + tom);
-        String sae = MBSEstyles.getStyle("saeml");
-        System.out.println("-->" + sae);
-        Object v12 = insertVertex(parent, "v12", "Child 1.2", 0, 0, 60, 40, tom);
+        Object v12 = insertVertex(parent, "v12", "Child 1.2", 0, 0, 60, 40);
         insertEdge(parent, null, "", v1, v12);
 
-        Object v21 = (mxCell) insertVertex(parent, "v21", "Child 2.1", 0, 0, 60, 40, sae);
+        Object v21 = (mxCell) insertVertex(parent, "v21", "Child 2.1", 0, 0, 60, 40);
         System.out.println(this.getCellStyle(v21));
-        saveForLater = v21;
-
-        // this.style
-        // mxStyleChange
-        // this.setCellStyle(tom, v21);
-        // System.out.println(this.getCellStyle(v21));
         insertEdge(parent, null, "", v2, v21);
 
         Object v22 = insertVertex(parent, "v22", "Child 2.2", 0, 0, 60, 40);
@@ -173,25 +146,24 @@ public class MbseGraphModel extends mxGraph {
         try {
             Object root = insertVertex(null, "treeRoot", "Root", 0, 0, 60, 40);
             Object v1 = insertVertex(null, "v1", "Child 1", 0, 0, 60, 40, defaultStyle);
-            saveForLater = v1;
             insertEdge(null, null, "", root, v1);
-            Object v2 = insertVertex(null, "v2", "Child 2", 0, 0, 60, 40);
+            Object v2 = insertVertex(null, "v2", "Child 2", 0, 0, 60, 40, defaultStyle);
             insertEdge(null, null, "", root, v2);
-            Object v3 = insertVertex(null, "v3", "Child 3", 0, 0, 60, 40);
+            Object v3 = insertVertex(null, "v3", "Child 3", 0, 0, 60, 40, defaultStyle);
             insertEdge(null, null, "", root, v3);
-            Object v11 = insertVertex(null, "v11", "Child 1.1", 0, 0, 60, 40);
+            Object v11 = insertVertex(null, "v11", "Child 1.1", 0, 0, 60, 40, defaultStyle);
             insertEdge(null, null, "", v1, v11);
-            Object v12 = insertVertex(null, "v12", "Child 1.2", 0, 0, 60, 40);
+            Object v12 = insertVertex(null, "v12", "Child 1.2", 0, 0, 60, 40, defaultStyle);
             insertEdge(null, null, "", v1, v12);
-            Object v21 = insertVertex(null, "v21", "Child 2.1", 0, 0, 60, 40);
+            Object v21 = insertVertex(null, "v21", "Child 2.1", 0, 0, 60, 40, defaultStyle);
             insertEdge(null, null, "", v2, v21);
-            Object v22 = insertVertex(null, "v22", "Child 2.2", 0, 0, 60, 40);
+            Object v22 = insertVertex(null, "v22", "Child 2.2", 0, 0, 60, 40, defaultStyle);
             insertEdge(null, null, "", v2, v22);
-            Object v221 = insertVertex(null, "v221", "Child 2.2.1", 0, 0, 60, 40);
+            Object v221 = insertVertex(null, "v221", "Child 2.2.1", 0, 0, 60, 40, defaultStyle);
             insertEdge(null, null, "", v22, v221);
-            Object v222 = insertVertex(null, "v222", "Child 2.2.2", 0, 0, 60, 40);
+            Object v222 = insertVertex(null, "v222", "Child 2.2.2", 0, 0, 60, 40, defaultStyle);
             insertEdge(null, null, "", v22, v222);
-            Object v31 = insertVertex(null, "v31", "Child 3.1", 0, 0, 60, 40);
+            Object v31 = insertVertex(null, "v31", "Child 3.1", 0, 0, 60, 40, defaultStyle);
             insertEdge(null, null, "", v3, v31);
         } finally {
             getModel().endUpdate();
