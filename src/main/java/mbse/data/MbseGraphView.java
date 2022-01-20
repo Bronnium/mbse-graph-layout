@@ -76,6 +76,8 @@ public class MbseGraphView extends JFrame {
 
 	private JMenuItem collapse;
 
+	private JMenuItem expand;
+
 	/**
 	 * Documentation of the MbseGraphView
 	 */
@@ -120,11 +122,13 @@ public class MbseGraphView extends JFrame {
 
 		lock = new JMenuItem("Lock / Unlock", new ImageIcon(getClass().getResource("/padlock.png")));
 		collapse = new JMenuItem("Collapse");
+		expand = new JMenuItem("Expand");
 
 		popupmenu.add(displayAsLeaf);
 		popupmenu.add(lock);
 		popupmenu.addSeparator();
 		popupmenu.add(collapse);
+		popupmenu.add(expand);
 		return popupmenu;
 	}
 
@@ -230,6 +234,8 @@ public class MbseGraphView extends JFrame {
 
 		// right click menu
 		displayAsLeaf.addActionListener(actionListener);
+		collapse.addActionListener(actionListener);
+		expand.addActionListener(actionListener);
 
 		horizontalSpacingSlide.addChangeListener(changeListener);
 		verticalSpacingSlide.addChangeListener(changeListener);

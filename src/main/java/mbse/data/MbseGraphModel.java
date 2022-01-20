@@ -190,4 +190,8 @@ public class MbseGraphModel extends mxGraph {
         defaultStyle = string;
     }
 
+    public boolean isCellFoldableObject(Object cell) {
+        return getOutgoingEdges(cell).length > 0;
+    }
+
 }
