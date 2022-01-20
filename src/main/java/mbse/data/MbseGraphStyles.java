@@ -10,15 +10,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.mxgraph.util.mxUtils;
+import com.mxgraph.util.mxXmlUtils;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import com.mxgraph.util.mxUtils;
-import com.mxgraph.util.mxXmlUtils;
 
 /**
  * This class is responsible for finding and parsing an XML file
@@ -70,7 +70,6 @@ public class MbseGraphStyles {
         for (int itr = 0; itr < nodeList.getLength(); itr++) {
             Element nNode = (Element) nodeList.item(itr);
             styleName = nNode.getAttribute("name"); // tom sawyer, saeml etc....
-            System.out.println(styleName);
 
             Hashtable<String, Object> stylesTable = new Hashtable<String, Object>();
 
@@ -81,58 +80,12 @@ public class MbseGraphStyles {
                 NamedNodeMap attributes = node.getAttributes();
                 if (attributes != null) {
                     Node child = attributes.item(0);
-                    System.out.println(child);
-                    // child.
-                    // appliedStyle +=
                     // node.getNodeName()+"="+child.getFirstChild().getTextContent()+";";
                     stylesTable.put(node.getNodeName(), child.getFirstChild().getTextContent());
                     // String res = node.getNodeValue();
                     // System.out.println(attributes);
                 }
             }
-
-            mapStyleHashtable.put(styleName, stylesTable);
-        }
-    }
-
-    private void parseStyleFile() {
-        String styleName = "";
-        String appliedStyle = "";
-        System.out.println(fileContent);
-
-        Document doc = mxXmlUtils.parseXml(fileContent);
-
-        doc.getDocumentElement().normalize();
-
-        Element styles = (Element) doc.getDocumentElement();
-
-        NodeList list = styles.getElementsByTagName("style");
-
-        // StyleMap MBSEstyles = new StyleMap();
-        for (int i = 0; i < list.getLength(); i++) {
-            Element nNode = (Element) list.item(i);
-            // System.out.println("\nCurrent Element :" + nNode.getNodeName());
-            // nNode.getAttributes();
-            styleName = nNode.getAttribute("name"); // tom sawyer, saeml etc....
-            Hashtable<String, Object> stylesTable = new Hashtable<String, Object>();
-
-            NodeList childNodes = nNode.getChildNodes();
-
-            for (int j = 0; j < childNodes.getLength(); j++) {
-                Node node = childNodes.item(i);
-                NamedNodeMap attributes = node.getAttributes();
-                if (attributes != null) {
-                    Node child = attributes.item(0);
-                    // child.
-                    // appliedStyle +=
-                    // node.getNodeName()+"="+child.getFirstChild().getTextContent()+";";
-                    stylesTable.put(node.getNodeName(), child.getFirstChild().getTextContent());
-                    // String res = node.getNodeValue();
-                    // System.out.println(attributes);
-                }
-            }
-            // stylesTable.put(attribute, appliedStyle);
-            // MBSEstyles.addStyle(nNode.getAttribute("name"), nNode);
 
             mapStyleHashtable.put(styleName, stylesTable);
         }

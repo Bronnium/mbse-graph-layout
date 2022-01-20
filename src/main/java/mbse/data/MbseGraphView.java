@@ -2,11 +2,9 @@ package mbse.data;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 
-import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -14,14 +12,12 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
-
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSlider;
 import javax.swing.JToolBar;
 import javax.swing.event.ChangeListener;
 
-import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 
 /**
@@ -78,6 +74,8 @@ public class MbseGraphView extends JFrame {
 
 	private JCheckBox sameOrigin;
 
+	private JMenuItem collapse;
+
 	/**
 	 * Documentation of the MbseGraphView
 	 */
@@ -121,8 +119,12 @@ public class MbseGraphView extends JFrame {
 		displayAsLeaf.setIcon(new ImageIcon(getClass().getResource("/tree-structure.png")));
 
 		lock = new JMenuItem("Lock / Unlock", new ImageIcon(getClass().getResource("/padlock.png")));
+		collapse = new JMenuItem("Collapse");
+
 		popupmenu.add(displayAsLeaf);
 		popupmenu.add(lock);
+		popupmenu.addSeparator();
+		popupmenu.add(collapse);
 		return popupmenu;
 	}
 
@@ -221,6 +223,7 @@ public class MbseGraphView extends JFrame {
 		graphComponent.getGraphControl().addMouseListener(mouseListener);
 
 		btnZoomIn.addActionListener(actionListener);
+		btnSaveAs.addActionListener(actionListener);
 		changeStyle.addActionListener(actionListener);
 
 		layoutSelection.addActionListener(actionListener);

@@ -144,7 +144,7 @@ public class MbseGraphModel extends mxGraph {
 
         getModel().beginUpdate();
         try {
-            Object root = insertVertex(null, "treeRoot", "Root", 0, 0, 60, 40);
+            Object root = insertVertex(null, "treeRoot", "Root", 0, 0, 60, 40, defaultStyle);
             Object v1 = insertVertex(null, "v1", "Child 1", 0, 0, 60, 40, defaultStyle);
             insertEdge(null, null, "", root, v1);
             Object v2 = insertVertex(null, "v2", "Child 2", 0, 0, 60, 40, defaultStyle);

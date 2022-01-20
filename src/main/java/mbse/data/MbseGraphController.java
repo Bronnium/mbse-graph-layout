@@ -1,21 +1,35 @@
 package mbse.data;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
-import javax.swing.JCheckBox;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.mxGraphComponent.mxGraphControl;
+import com.mxgraph.util.mxCellRenderer;
 
 public class MbseGraphController {
+
+	private static final Logger log = Logger.getLogger(GraphVisualizer.class.getName());
 
 	private MbseGraphView view;
 	private MbseGraphModel model;
@@ -79,7 +93,7 @@ public class MbseGraphController {
 		actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				System.out.println("test");
-				// linkBtnAndLabel(actionEvent);
+				linkBtnAndLabel(actionEvent);
 			}
 		};
 
@@ -173,10 +187,33 @@ public class MbseGraphController {
 	private void linkBtnAndLabel(ActionEvent event) {
 		// model.incX();
 		// view.setText(Integer.toString(model.getX()));
-		System.out.println("action listnener triggered" + event.getSource());
 
-		if (event.getSource() instanceof JCheckBox) {
-			changeAppliedStyle();
+		if (event.getSource() instanceof JButton) {
+			// changeAppliedStyle();
+			// System.out.println("action listnener triggered: " + event.getSource());
+
+			// Create a file chooser
+			final JFileChooser fc = new JFileChooser();
+			FileFilter filter = new FileNameExtensionFilter("PNG Images", "png");
+			fc.setFileFilter(filter);
+
+			int returnVal = fc.showOpenDialog(view);
+
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = fc.getSelectedFile();
+				BufferedImage image = mxCellRenderer.createBufferedImage(model, null, 1, Color.WHITE, true, null);
+				try {
+					ImageIO.write(image, "PNG", file);
+
+					JOptionPane.showMessageDialog(view, "File has been created");
+
+				} catch (IOException e) {
+					log.log(Level.SEVERE, "Failed to create image file.", e);
+				}
+			} else {
+
+			}
+
 		}
 		/*
 		 * if (event.getSource() instanceof JMenuItem) {

@@ -1,14 +1,9 @@
 package mbse.data;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
-import java.io.File;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 public class TestMbseGraphStyles {
 
@@ -19,12 +14,6 @@ public class TestMbseGraphStyles {
     public void setUp() {
         // graphStyles = Mockito.mock(MbseGraphStyles.class);
         graphStyles = new MbseGraphStyles();
-    }
-
-    @Test
-    public void testLoadFile2() {
-        when(graphStyles.getContent()).thenReturn("Mockito");
-        assertEquals("Mockito", graphStyles.getContent());
     }
 
     /** Test if file is found */
@@ -38,10 +27,5 @@ public class TestMbseGraphStyles {
 
         // assert
         assertTrue("File is found", found);
-    }
-
-    @Test
-    public void testLoadFileNotExists() {
-        // exce
     }
 }
