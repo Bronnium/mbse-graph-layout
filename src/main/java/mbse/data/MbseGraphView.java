@@ -121,8 +121,8 @@ public class MbseGraphView extends JFrame {
 		displayAsLeaf.setIcon(new ImageIcon(getClass().getResource("/tree-structure.png")));
 
 		lock = new JMenuItem("Lock / Unlock", new ImageIcon(getClass().getResource("/padlock.png")));
-		collapse = new JMenuItem("Collapse");
-		expand = new JMenuItem("Expand");
+		collapse = new JMenuItem("Collapse", new ImageIcon(getClass().getResource("/collapse.gif")));
+		expand = new JMenuItem("Expand", new ImageIcon(getClass().getResource("/expand.gif")));
 
 		popupmenu.add(displayAsLeaf);
 		popupmenu.add(lock);
@@ -135,7 +135,7 @@ public class MbseGraphView extends JFrame {
 	private Component createSecondaryToolBar() {
 		JToolBar toolBar = new JToolBar("Layout Properties", JToolBar.VERTICAL);
 
-		// empeche la barre d'etre boug�e
+		// empeche la barre d'etre bougée
 		toolBar.setFloatable(true);
 
 		toolBar.add(new JLabel("Set horizontal spacing"));
@@ -168,40 +168,39 @@ public class MbseGraphView extends JFrame {
 	}
 
 	private Component createMainToolBar() {
-		// La barre d'outils � proprement parler
+		// La barre d'outils a proprement parler
 		JToolBar toolBar = new JToolBar();
 
-		// empeche la barre d'etre boug�e
+		// empeche la barre d'etre bougée
 		toolBar.setFloatable(false);
 
 		btnSelect = new JButton(new ImageIcon(getClass().getResource("/select.gif")));
-		// btnZoomIn.addActionListener(actionListener);
 		toolBar.add(btnSelect);
 
 		btnPan = new JButton(new ImageIcon(getClass().getResource("/pan.gif")));
-		// btnZoomIn.addActionListener(actionListener);
 		toolBar.add(btnPan);
 
 		toolBar.addSeparator();
 
 		btnZoomIn = new JButton(new ImageIcon(getClass().getResource("/zoomin.gif")));
-		// btnZoomIn.addActionListener(actionListener);
+		btnZoomIn.setToolTipText("zoom in");
 		toolBar.add(btnZoomIn);
-
 		btnZoomOut = new JButton(new ImageIcon(getClass().getResource("/zoomout.gif")));
-		// btnZoomOut.addActionListener(actionListener);
+		btnZoomOut.setToolTipText("zoom out");
 		toolBar.add(btnZoomOut);
-
 		btnZoomFit = new JButton(new ImageIcon(getClass().getResource("/zoomactual.gif")));
-		// btnZoomFit.addActionListener(actionListener);
+		btnZoomFit.setToolTipText("zoom fit");
 		toolBar.add(btnZoomFit);
+
 		toolBar.addSeparator();
 
 		changeStyle = new JCheckBox("UML Style");
 		toolBar.add(changeStyle);
+
 		toolBar.addSeparator();
 
 		btnSaveAs = new JButton(new ImageIcon(getClass().getResource("/saveas.gif")));
+		btnSaveAs.setToolTipText("export as image");
 		toolBar.add(btnSaveAs);
 
 		toolBar.addSeparator();
@@ -226,7 +225,6 @@ public class MbseGraphView extends JFrame {
 			MouseListener mouseListener) {
 		graphComponent.getGraphControl().addMouseListener(mouseListener);
 
-		btnZoomIn.addActionListener(actionListener);
 		btnSaveAs.addActionListener(actionListener);
 		changeStyle.addActionListener(actionListener);
 
@@ -247,6 +245,20 @@ public class MbseGraphView extends JFrame {
 
 	public void resizeCombox() {
 		// layoutSelection.setMaximumSize(layoutSelection.getPreferredSize());
+	}
+
+	/**
+	 * Add action listener on Zoom controls (in, out, fit)
+	 * 
+	 * @param zoomActionListener
+	 */
+	public void addZoomControls(ActionListener zoomActionListener) {
+		btnZoomIn.addActionListener(zoomActionListener);
+		btnZoomIn.setActionCommand("zoomIn");
+		btnZoomOut.addActionListener(zoomActionListener);
+		btnZoomOut.setActionCommand("zoomOut");
+		btnZoomFit.addActionListener(zoomActionListener);
+		btnZoomFit.setActionCommand("zoomFit");
 	}
 
 }

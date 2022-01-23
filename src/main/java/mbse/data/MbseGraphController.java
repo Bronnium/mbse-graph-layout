@@ -76,32 +76,28 @@ public class MbseGraphController {
 	 * Allows to create all listeners and pass for the view.
 	 */
 	public void addViewControls() {
+
+		createAndAddZoomControls();
+
 		ActionListener actionListenerBox = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
 				boolean selected = abstractButton.getModel().isSelected();
 				if (selected) {
-					// mxCell node = (mxCell) ((MbseGraphModel) model).saveForLater;
-					// Object[] allEdge = model.getChildEdges(model.getDefaultParent());
 					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
 					System.out.println(allVertex.length);
 					model.setCellStyle("tom_sawyer", allVertex);
 				} else {
-					// mxCell node = (mxCell) ((MbseGraphModel) model).saveForLater;
 					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
 					System.out.println(allVertex.length);
 					model.setCellStyle("saeml", allVertex);
 				}
-				// abstractButton.setText(newLabel);
-				// graphComponent.getGraph().getModel()
-
 			}
 		};
 		view.changeStyle.addActionListener(actionListenerBox);
 
 		actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
-				System.out.println("test du actionlistener");
 				linkBtnAndLabel(actionEvent);
 			}
 		};
@@ -120,32 +116,37 @@ public class MbseGraphController {
 				// if(e.BUTTON2)
 				rightClickMenu(e);
 			}
-			/*
-			 * public void mousePressed(MouseEvent e)
-			 * {
-			 * // Handles context menu on the Mac where the trigger is on mousepressed
-			 * mouseReleased(e);
-			 * }
-			 * 
-			 * public void mouseReleased(MouseEvent e)
-			 * {
-			 * if (e.isPopupTrigger())
-			 * {
-			 * System.out.println("click");//showGraphPopupMenu(e);
-			 * 
-			 * popupmenu.show(graphComponent, e.getX(), e.getY());
-			 * //graphComponent.getGraph().getSelectionCell()
-			 * System.out.println("Selected cell:"+graphComponent.getGraph().
-			 * getSelectionCell());
-			 * }
-			 * else
-			 * System.out.println("when ?");
-			 * }
-			 */
-
 		};
 
 		view.addInputControl(actionListener, changeListener, mouseListener);
+	}
+
+	/**
+	 * 
+	 */
+	private void createAndAddZoomControls() {
+
+		ActionListener zoomActionListener = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				switch (e.getActionCommand()) {
+					case "zoomIn":
+						view.graphComponent.zoomIn();
+						break;
+					case "zoomOut":
+						view.graphComponent.zoomOut();
+						break;
+					case "zoomFit":
+						view.graphComponent.zoomActual();
+						break;
+					default:
+						System.out.println("unknown");
+				}
+			}
+		};
+
+		view.addZoomControls(zoomActionListener);
 	}
 
 	private void rightClickMenu(MouseEvent e) {
