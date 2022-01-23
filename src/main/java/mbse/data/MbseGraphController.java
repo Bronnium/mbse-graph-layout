@@ -25,6 +25,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.mxgraph.layout.mxCircleLayout;
+import com.mxgraph.layout.mxCompactTreeLayout;
+import com.mxgraph.layout.mxStackLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.mxGraphComponent.mxGraphControl;
@@ -83,13 +86,11 @@ public class MbseGraphController {
 					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
 					System.out.println(allVertex.length);
 					model.setCellStyle("tom_sawyer", allVertex);
-					// model.getModel().setStyle(allEdge, "tom_sawyer");
 				} else {
 					// mxCell node = (mxCell) ((MbseGraphModel) model).saveForLater;
 					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
 					System.out.println(allVertex.length);
 					model.setCellStyle("saeml", allVertex);
-					// model.getModel().setStyle(node, "saeml");
 				}
 				// abstractButton.setText(newLabel);
 				// graphComponent.getGraph().getModel()
@@ -116,6 +117,7 @@ public class MbseGraphController {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				// if(e.BUTTON2)
 				rightClickMenu(e);
 			}
 			/*
@@ -176,10 +178,12 @@ public class MbseGraphController {
 			if (slider.getValueIsAdjusting())
 				return;
 
-			// int spacing = slider.getValue();
+			int spacing = slider.getValue();
 
 			if (slider.getName().equals("HorizontalSpacing")) {
 				// ((MbseLayout) currentAppliedLayout).setHorizontalSpacing(spacing);
+				mxCompactTreeLayout layout = ((mxCompactTreeLayout) model.getAppliedLayout());
+				layout.setLevelDistance(spacing);
 				// model.getAppliedLayout().setHorizontalSpacing(spacing);
 
 			} else // verticalSpacing
@@ -193,12 +197,8 @@ public class MbseGraphController {
 	}
 
 	private void linkBtnAndLabel(ActionEvent event) {
-		// model.incX();
-		// view.setText(Integer.toString(model.getX()));
 
 		if (event.getSource() instanceof JButton) {
-			// changeAppliedStyle();
-			// System.out.println("action listnener triggered: " + event.getSource());
 
 			// Create a file chooser
 			final JFileChooser fc = new JFileChooser();
@@ -234,38 +234,24 @@ public class MbseGraphController {
 				case "Expand":
 					expandAction();
 					break;
+				case "display as leafs":
+					layoutOnSelectedGroup();
+					break;
 				default:
 					System.out.println("unknown: " + item.getText());
 			}
-			// RateauLayout layout = new RateauLayout();
-			// model.setAppliedLayout(layout);
-			// model.getAppliedLayout().execute(selectedCell);
 		}
+	}
 
-		/*
-		 * public void setSpacing(ChangeEvent event) {
-		 * JSlider slider = (JSlider) event.getSource();
-		 * 
-		 * // spacing value is applied only when slider is released
-		 * if (slider.getValueIsAdjusting())
-		 * return;
-		 * 
-		 * int spacing = slider.getValue();
-		 * 
-		 * if (slider.getName().equals("HorizontalSpacing"))
-		 * {
-		 * ((MbseLayout) currentAppliedLayout).setHorizontalSpacing(spacing);
-		 * 
-		 * }
-		 * else // verticalSpacing
-		 * {
-		 * ((MbseLayout) currentAppliedLayout).setVerticalSpacing(spacing);
-		 * }
-		 * 
-		 * model.executeLayout();
-		 * 
-		 * }
-		 */
+	private void layoutOnSelectedGroup() {
+		System.out.println("apply layout");
+		model.getModel().beginUpdate();
+		try {
+			RootLayout rootLayout = new RootLayout(model);
+			rootLayout.execute(model.getSelectionCell());
+		} finally {
+			model.getModel().endUpdate();
+		}
 	}
 
 	private void expandAction() {
@@ -293,8 +279,8 @@ public class MbseGraphController {
 			model.toggleCells(true, cellsAffected.toArray(), true/* includeEdges */);
 			model.appliedLayout.execute(model.getDefaultParent());
 		} finally {
-
-			mxMorphing morph = new mxMorphing(view.graphComponent, 20, 1.2, 20);
+			// 10, 1.7, 20
+			mxMorphing morph = new mxMorphing(view.graphComponent, 10, 1.7, 20);
 			morph.addListener(mxEvent.DONE, new mxIEventListener() {
 
 				@Override
@@ -303,7 +289,7 @@ public class MbseGraphController {
 				}
 			});
 			morph.startAnimation();
-			// model.getModel().endUpdate();
+
 		}
 
 	}
@@ -348,7 +334,8 @@ public class MbseGraphController {
 			// model.getModel().setCollapsed(selected, true);
 			model.appliedLayout.execute(model.getDefaultParent());
 		} finally {
-			mxMorphing morph = new mxMorphing(view.graphComponent, 20, 1.2, 20);
+			// 10, 1.7, 20
+			mxMorphing morph = new mxMorphing(view.graphComponent);
 			morph.addListener(mxEvent.DONE, new mxIEventListener() {
 
 				@Override
@@ -367,20 +354,5 @@ public class MbseGraphController {
 		} else {
 			model.setAppliedStyle("saeml");
 		}
-		updateStyle();
 	}
-
-	private void updateStyle() {
-		model.getModel().beginUpdate();
-		try {
-			// model.getcels
-			Object[] cells = new Object[] {};
-			// cells[0] = model.saveForLater;
-
-			model.setCellStyle(model.getAppliedStyle(), cells);
-		} finally {
-			model.getModel().endUpdate();
-		}
-	}
-
 }

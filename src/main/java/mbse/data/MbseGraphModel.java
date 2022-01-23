@@ -53,7 +53,7 @@ public class MbseGraphModel extends mxGraph {
         // stylesheet.putCellStyle("ROUNDED", style);
 
         this.getStylesheet().putCellStyle("imageTest", style);
-        appliedLayout = new DefaultMbseLayout(this);
+        appliedLayout = new RootLayout(this);
         // appliedLayout = new CallStackLayout(this);
         Object parent = getDefaultParent();
 
@@ -192,6 +192,7 @@ public class MbseGraphModel extends mxGraph {
 
     public boolean isCellFoldableObject(Object cell) {
         return getOutgoingEdges(cell).length > 0;
+
     }
 
 }
