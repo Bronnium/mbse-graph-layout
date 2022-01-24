@@ -50,7 +50,7 @@ public class MbseGraphView extends JFrame {
 
 	private JComboBox<Object> layoutSelection;
 
-	public JCheckBox changeStyle;
+	protected JCheckBox changeStyle;
 
 	private JMenuItem lock;
 
@@ -106,7 +106,8 @@ public class MbseGraphView extends JFrame {
 		contentPane.add(createPopupMenu());
 
 		contentPane.add(createMainToolBar(), BorderLayout.NORTH);
-		contentPane.add(createSecondaryToolBar(), BorderLayout.EAST);
+		// secondary toolbar for layout parameters
+		// contentPane.add(createSecondaryToolBar(), BorderLayout.EAST);
 	}
 
 	/**
@@ -120,12 +121,13 @@ public class MbseGraphView extends JFrame {
 		displayAsLeaf = new JMenuItem("display as leafs");
 		displayAsLeaf.setIcon(new ImageIcon(getClass().getResource("/tree-structure.png")));
 
-		lock = new JMenuItem("Lock / Unlock", new ImageIcon(getClass().getResource("/padlock.png")));
+		// lock = new JMenuItem("Lock / Unlock", new
+		// ImageIcon(getClass().getResource("/padlock.png")));
 		collapse = new JMenuItem("Collapse", new ImageIcon(getClass().getResource("/collapse.gif")));
 		expand = new JMenuItem("Expand", new ImageIcon(getClass().getResource("/expand.gif")));
 
 		popupmenu.add(displayAsLeaf);
-		popupmenu.add(lock);
+		// popupmenu.add(lock);
 		popupmenu.addSeparator();
 		popupmenu.add(collapse);
 		popupmenu.add(expand);
@@ -164,6 +166,9 @@ public class MbseGraphView extends JFrame {
 		sameOrigin = new JCheckBox("Same origin for edges");
 		toolBar.add(sameOrigin);
 
+		// horizontalSpacingSlide.addChangeListener(changeListener);
+		// verticalSpacingSlide.addChangeListener(changeListener);
+
 		return toolBar;
 	}
 
@@ -173,15 +178,16 @@ public class MbseGraphView extends JFrame {
 
 		// empeche la barre d'etre bougée
 		toolBar.setFloatable(false);
-
-		btnSelect = new JButton(new ImageIcon(getClass().getResource("/select.gif")));
-		toolBar.add(btnSelect);
-
-		btnPan = new JButton(new ImageIcon(getClass().getResource("/pan.gif")));
-		toolBar.add(btnPan);
-
-		toolBar.addSeparator();
-
+		/*
+		 * btnSelect = new JButton(new
+		 * ImageIcon(getClass().getResource("/select.gif")));
+		 * toolBar.add(btnSelect);
+		 * 
+		 * btnPan = new JButton(new ImageIcon(getClass().getResource("/pan.gif")));
+		 * toolBar.add(btnPan);
+		 * 
+		 * toolBar.addSeparator();
+		 */
 		btnZoomIn = new JButton(new ImageIcon(getClass().getResource("/zoomin.gif")));
 		btnZoomIn.setToolTipText("zoom in");
 		toolBar.add(btnZoomIn);
@@ -194,7 +200,7 @@ public class MbseGraphView extends JFrame {
 
 		toolBar.addSeparator();
 
-		changeStyle = new JCheckBox("UML Style");
+		changeStyle = new JCheckBox("Classic style");
 		toolBar.add(changeStyle);
 
 		toolBar.addSeparator();
@@ -216,8 +222,7 @@ public class MbseGraphView extends JFrame {
 	}
 
 	public void addMbseGraphComponent(MbseGraphModel model) {
-		graphComponent = new mxGraphComponent(model);
-
+		graphComponent = new MbseGraphComponent(model);
 		contentPane.add(graphComponent);
 	}
 
@@ -234,9 +239,6 @@ public class MbseGraphView extends JFrame {
 		displayAsLeaf.addActionListener(actionListener);
 		collapse.addActionListener(actionListener);
 		expand.addActionListener(actionListener);
-
-		horizontalSpacingSlide.addChangeListener(changeListener);
-		verticalSpacingSlide.addChangeListener(changeListener);
 	}
 
 	public void displayPopupMenu(int x, int y) {

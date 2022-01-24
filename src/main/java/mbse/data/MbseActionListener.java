@@ -11,10 +11,7 @@ public class MbseActionListener implements ActionListener {
         NONE
     }
 
-    private Action action = Action.NONE;
-
     public MbseActionListener(Action action) {
-        this.action = action;
     }
 
     public void actionPerformed(ActionEvent e) {

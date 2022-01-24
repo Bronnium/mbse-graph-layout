@@ -14,8 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -25,10 +25,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.layout.mxCompactTreeLayout;
-import com.mxgraph.layout.mxStackLayout;
-import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.mxGraphComponent.mxGraphControl;
 import com.mxgraph.swing.util.mxMorphing;
@@ -40,7 +37,7 @@ import com.mxgraph.view.mxGraph.mxICellVisitor;
 
 public class MbseGraphController {
 
-	private static final Logger log = Logger.getLogger(GraphVisualizer.class.getName());
+	private static final Logger log = Logger.getLogger(MbseGraphController.class.getName());
 
 	private MbseGraphView view;
 	private MbseGraphModel model;
@@ -67,8 +64,9 @@ public class MbseGraphController {
 	 * Display the user interface
 	 */
 	public void displayView() {
+		model.setCellsMovable(true);
 		model.getAppliedLayout().execute(model.getDefaultParent());
-
+		model.setCellsMovable(false);
 		view.setVisible(true);
 	}
 
@@ -79,22 +77,7 @@ public class MbseGraphController {
 
 		createAndAddZoomControls();
 
-		ActionListener actionListenerBox = new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
-				AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
-				boolean selected = abstractButton.getModel().isSelected();
-				if (selected) {
-					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
-					System.out.println(allVertex.length);
-					model.setCellStyle("tom_sawyer", allVertex);
-				} else {
-					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
-					System.out.println(allVertex.length);
-					model.setCellStyle("saeml", allVertex);
-				}
-			}
-		};
-		view.changeStyle.addActionListener(actionListenerBox);
+		createChangeStyleControl();
 
 		actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
@@ -113,12 +96,33 @@ public class MbseGraphController {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// if(e.BUTTON2)
-				rightClickMenu(e);
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					rightClickMenu(e);
+				}
+
 			}
 		};
 
 		view.addInputControl(actionListener, changeListener, mouseListener);
+	}
+
+	private void createChangeStyleControl() {
+		ActionListener actionListenerBox = new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+
+				JCheckBox checkBox = (JCheckBox) actionEvent.getSource();
+
+				if (checkBox.isSelected()) {
+					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
+					model.setCellStyle("saeml", allVertex);
+				} else {
+					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
+					model.setCellStyle("tom_sawyer", allVertex);
+				}
+			}
+		};
+
+		view.changeStyle.addActionListener(actionListenerBox);
 	}
 
 	/**
@@ -141,7 +145,7 @@ public class MbseGraphController {
 						view.graphComponent.zoomActual();
 						break;
 					default:
-						System.out.println("unknown");
+						log.log(Level.INFO, "Unknown action command.", e.getActionCommand());
 				}
 			}
 		};
@@ -150,24 +154,15 @@ public class MbseGraphController {
 	}
 
 	private void rightClickMenu(MouseEvent e) {
-		// System.out.println("Selected cell:"+e);
-
-		System.out.println(e.getComponent());
 
 		if (e.getComponent() instanceof mxGraphControl) {
 			mxGraphControl graphControl = (mxGraphControl) e.getComponent();
 
 			mxGraphComponent graphComponent = graphControl.getGraphContainer();
 			if (graphComponent.getGraph().getSelectionCell() != null) {
-				// selectedCell = (mxCell) graphComponent.getGraph().getSelectionCell();
 				view.displayPopupMenu(e.getX(), e.getY());
-			} else {
-				System.out.println("Cell not selected");
 			}
-		} else {
-			System.out.println("not mxGraphComponent");
 		}
-		// popupmenu.show(graphComponent, e.getX(), e.getY());
 	}
 
 	private void changedState(ChangeEvent event) {
@@ -193,7 +188,9 @@ public class MbseGraphController {
 				// ((MbseLayout) currentAppliedLayout).setVerticalSpacing(spacing);
 			}
 
+			model.setCellsMovable(true);
 			model.getAppliedLayout().execute(model.getDefaultParent());
+			model.setCellsMovable(false);
 		}
 	}
 
@@ -245,11 +242,12 @@ public class MbseGraphController {
 	}
 
 	private void layoutOnSelectedGroup() {
-		System.out.println("apply layout");
 		model.getModel().beginUpdate();
 		try {
 			RootLayout rootLayout = new RootLayout(model);
+			model.setCellsMovable(true);
 			rootLayout.execute(model.getSelectionCell());
+			model.setCellsMovable(false);
 		} finally {
 			model.getModel().endUpdate();
 		}
@@ -278,7 +276,9 @@ public class MbseGraphController {
 			});
 
 			model.toggleCells(true, cellsAffected.toArray(), true/* includeEdges */);
+			model.setCellsMovable(true);
 			model.appliedLayout.execute(model.getDefaultParent());
+			model.setCellsMovable(false);
 		} finally {
 			// 10, 1.7, 20
 			mxMorphing morph = new mxMorphing(view.graphComponent, 10, 1.7, 20);
@@ -290,6 +290,7 @@ public class MbseGraphController {
 				}
 			});
 			morph.startAnimation();
+			view.graphComponent.refresh();
 
 		}
 
@@ -299,15 +300,6 @@ public class MbseGraphController {
 		Object selected = model.getSelectionCell();
 		model.getModel().beginUpdate();
 		try {
-			// System.out.println(model.getChildVertices(selected));
-			mxCell cell = (mxCell) selected;
-
-			// Object[] connections = model.getConnections(cell, null, false);
-
-			for (Object obj : model.getOutgoingEdges(selected)) {
-				System.out.println(obj);
-			}
-
 			ArrayList<Object> cellsAffected = new ArrayList<>();
 			model.traverse(selected, true, new mxICellVisitor() {
 				@Override
@@ -326,16 +318,11 @@ public class MbseGraphController {
 			});
 
 			model.toggleCells(false, cellsAffected.toArray(), true/* includeEdges */);
-			// System.out.println("outgoing" + model.getOutgoingEdges(selected).length);
-
-			// System.out.println(cell.getChildCount());
-			// Object[] children = model.getChildCells(selected);
-			// System.out.println(children.length);
-			// model.getModel().setVisible(selected, false);
-			// model.getModel().setCollapsed(selected, true);
+			model.setCellsMovable(true);
 			model.appliedLayout.execute(model.getDefaultParent());
+			model.setCellsMovable(false);
 		} finally {
-			// 10, 1.7, 20
+			// Create morphing with defaut parameters, can be tested with: 10, 1.7, 20
 			mxMorphing morph = new mxMorphing(view.graphComponent);
 			morph.addListener(mxEvent.DONE, new mxIEventListener() {
 
@@ -345,15 +332,7 @@ public class MbseGraphController {
 				}
 			});
 			morph.startAnimation();
-			// view.graphComponent.
-		}
-	}
-
-	private void changeAppliedStyle() {
-		if (model.getAppliedStyle().equals("saeml")) {
-			model.setAppliedStyle("tom_sawyer");
-		} else {
-			model.setAppliedStyle("saeml");
+			view.graphComponent.refresh();
 		}
 	}
 }

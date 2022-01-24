@@ -21,6 +21,7 @@ public class RootLayout extends mxCompactTreeLayout {
 
 	@Override
 	public void execute(Object parent) {
+		graph.setCellsMovable(true);
 		super.execute(parent);
 
 		ArrayList<Object> roots = new ArrayList<Object>();
@@ -51,6 +52,7 @@ public class RootLayout extends mxCompactTreeLayout {
 			rearrangeEdges();
 
 		} finally {
+			graph.setCellsMovable(false);
 			graph.getModel().endUpdate();
 		}
 	}

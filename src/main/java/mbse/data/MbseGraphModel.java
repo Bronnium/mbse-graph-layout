@@ -15,8 +15,7 @@ public class MbseGraphModel extends mxGraph {
 
     private static String defaultStyle = "tom_sawyer";
 
-    public String[] availableLayouts = new String[] { "Effective Java", "Head First Java",
-            "Thinking in Java", "Java for Dummies" };
+    public String[] availableLayouts = new String[] { "Hierarchical layout" };
 
     public MbseGraphModel(boolean option) {
         super();
@@ -133,7 +132,14 @@ public class MbseGraphModel extends mxGraph {
     public MbseGraphModel() {
         super();
 
-        MbseGraphStyles mbseStyles = new MbseGraphStyles("/styles.xml");
+        setDropEnabled(false); // drop elements on edge is disabled
+        setCellsEditable(false); // elements in graph shall not be changed
+        setAllowLoops(false); //
+        setAllowDanglingEdges(false);
+
+        setCellsMovable(false);
+
+        MbseGraphStyles mbseStyles = new MbseGraphStyles();
 
         Hashtable<String, Hashtable<String, Object>> styles = mbseStyles.getAvailableStyles();
 
@@ -145,6 +151,7 @@ public class MbseGraphModel extends mxGraph {
         getModel().beginUpdate();
         try {
             Object root = insertVertex(null, "treeRoot", "Root", 0, 0, 60, 40, defaultStyle);
+            // ((mxCell) root).setConnectable(false);
             Object v1 = insertVertex(null, "v1", "Child 1", 0, 0, 60, 40, defaultStyle);
             insertEdge(null, null, "", root, v1);
             Object v2 = insertVertex(null, "v2", "Child 2", 0, 0, 60, 40, defaultStyle);
