@@ -145,7 +145,7 @@ public class MbseGraphController {
 						view.graphComponent.zoomActual();
 						break;
 					default:
-						log.log(Level.INFO, "Unknown action command.", e.getActionCommand());
+						log.log(Level.INFO, "Unknown action command {0}.", e.getActionCommand());
 				}
 			}
 		};

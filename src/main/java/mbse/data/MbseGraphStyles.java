@@ -2,6 +2,7 @@ package mbse.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +27,7 @@ public class MbseGraphStyles {
 
     private final static String STYLES_PATH = "/styles.xml";
 
-    private Hashtable<String, Hashtable<String, Object>> mapStyleHashtable = new Hashtable<String, Hashtable<String, Object>>();
+    private HashMap<String, HashMap<String, Object>> mapStyleHashtable = new HashMap<String, HashMap<String, Object>>();
 
     private File file;
 
@@ -63,7 +64,7 @@ public class MbseGraphStyles {
             Element nNode = (Element) nodeList.item(itr);
             styleName = nNode.getAttribute("name"); // tom sawyer, saeml etc....
 
-            Hashtable<String, Object> stylesTable = new Hashtable<String, Object>();
+            HashMap<String, Object> stylesTable = new HashMap<String, Object>();
 
             NodeList childNodes = nNode.getChildNodes();
 
@@ -80,7 +81,7 @@ public class MbseGraphStyles {
         }
     }
 
-    public Hashtable<String, Hashtable<String, Object>> getAvailableStyles() {
+    public HashMap<String, HashMap<String, Object>> getAvailableStyles() {
         return mapStyleHashtable;
     }
 

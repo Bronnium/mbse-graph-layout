@@ -1,5 +1,6 @@
 package mbse.data;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 
 import com.mxgraph.layout.mxCompactTreeLayout;
@@ -17,6 +18,11 @@ public class MbseGraphModel extends mxGraph {
 
     public String[] availableLayouts = new String[] { "Hierarchical layout" };
 
+    /**
+     * Model for complex data
+     * 
+     * @param option
+     */
     public MbseGraphModel(boolean option) {
         super();
 
@@ -27,7 +33,7 @@ public class MbseGraphModel extends mxGraph {
         style.put(mxConstants.STYLE_OPACITY, 50);
 
         style.put(mxConstants.STYLE_ROUNDED, true);
-        style.put(mxConstants.STYLE_IMAGE, "file:/C:\\dev\\bell.png");
+        style.put(mxConstants.STYLE_IMAGE, "/bell.png");
         style.put(mxConstants.STYLE_IMAGE_HEIGHT, 100); // padding de l'image
         style.put(mxConstants.STYLE_IMAGE_WIDTH, 100); // padding de l'image
         style.put(mxConstants.STYLE_FOLDABLE, 1); // padding de l'image
@@ -72,7 +78,7 @@ public class MbseGraphModel extends mxGraph {
         // styleArrondi+=styleEnfant1;
         styleArrondi += mxConstants.STYLE_FILLCOLOR + "=#e0f4ef;";
 
-        styleArrondi += mxConstants.STYLE_IMAGE + "=file:/C:\\dev\\bell.png;" + mxConstants.STYLE_IMAGE_VERTICAL_ALIGN
+        styleArrondi += mxConstants.STYLE_IMAGE + "=/bell.png;" + mxConstants.STYLE_IMAGE_VERTICAL_ALIGN
                 + "=" + mxConstants.ALIGN_RIGHT + ";";
         // graph.getView().getState(cell).getStyle().replace(mxConstants.STYLE_IMAGE,
         // new ImageIcon(
@@ -127,7 +133,7 @@ public class MbseGraphModel extends mxGraph {
     }
 
     /**
-     * Model - basic data
+     * Model - basic data used for PBS and FBS diagrams
      */
     public MbseGraphModel() {
         super();
@@ -141,7 +147,7 @@ public class MbseGraphModel extends mxGraph {
 
         MbseGraphStyles mbseStyles = new MbseGraphStyles();
 
-        Hashtable<String, Hashtable<String, Object>> styles = mbseStyles.getAvailableStyles();
+        HashMap<String, HashMap<String, Object>> styles = mbseStyles.getAvailableStyles();
 
         styles.forEach(
                 (k, v) -> this.getStylesheet().putCellStyle(k, v));
