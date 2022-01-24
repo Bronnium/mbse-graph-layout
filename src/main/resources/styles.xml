@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <styles>
 	<style name="tom_sawyer">
-		<fontColor value="#ff0000" />
+		<fontColor value="#000000" />
 		<fontFamily value="Times" />
 		<fillColor value="#e0f4ef" />
 		<strokeColor value="#69cdb5" />
 		<rounded value="1" />
 	</style>
 	<style name="saeml">
-		<fontColor value="#ff0000" /> <!-- OK pris en compte -->
+		<fontColor value="#000000" />
 		<fontFamily value="Verdana" />
-		<fillColor value="#0000ff" />
-		<strokeColor value="#69cdb5" />
+		<fillColor value="#cfe2f3" />
+		<strokeColor value="#a4c2f4" />
 		<rounded value="0" />
 	</style>
 </styles>

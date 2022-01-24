@@ -10,9 +10,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import com.mxgraph.util.mxUtils;
-import com.mxgraph.util.mxXmlUtils;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -29,8 +26,6 @@ public class MbseGraphStyles {
 
     private final static String STYLES_PATH = "/styles.xml";
 
-    private String fileContent;
-
     private Hashtable<String, Hashtable<String, Object>> mapStyleHashtable = new Hashtable<String, Hashtable<String, Object>>();
 
     private File file;
@@ -39,11 +34,8 @@ public class MbseGraphStyles {
      * Constructor with MBSE default style parameters
      */
     public MbseGraphStyles() {
-
-        // loadAndReadFile();
-        // if (!fileContent.isEmpty()) {
-        // parseStyleFile();
-        // }
+        String path = MbseGraphStyles.class.getResource(STYLES_PATH).getPath();
+        loadAndReadFile(path);
     }
 
     public MbseGraphStyles(String string) {
@@ -65,8 +57,6 @@ public class MbseGraphStyles {
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.parse(file);
         doc.getDocumentElement().normalize();
-        // System.out.println("Root element: " +
-        // doc.getDocumentElement().getNodeName());
         NodeList nodeList = doc.getElementsByTagName("style");
         // nodeList is not iterable, so we are using for loop
         for (int itr = 0; itr < nodeList.getLength(); itr++) {
@@ -82,10 +72,7 @@ public class MbseGraphStyles {
                 NamedNodeMap attributes = node.getAttributes();
                 if (attributes != null) {
                     Node child = attributes.item(0);
-                    // node.getNodeName()+"="+child.getFirstChild().getTextContent()+";";
                     stylesTable.put(node.getNodeName(), child.getFirstChild().getTextContent());
-                    // String res = node.getNodeValue();
-                    // System.out.println(attributes);
                 }
             }
 
@@ -103,21 +90,6 @@ public class MbseGraphStyles {
      * 
      * @return String - content or EMPTY if file not readable
      */
-    public String loadAndReadFile() {
-        String filename = getClass().getResource(STYLES_PATH).getPath();
-        try {
-            fileContent = mxUtils.readFile(filename);
-            return fileContent.replaceAll("\\x0a", "");
-        } catch (IOException e) {
-            log.log(Level.SEVERE, "File not found.", e);
-            return fileContent = "";
-        }
-    }
-
-    public String getContent() {
-        return fileContent;
-    }
-
     public boolean loadAndReadFile(String path) {
         file = new File(path);
 
