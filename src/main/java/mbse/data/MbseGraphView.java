@@ -107,7 +107,7 @@ public class MbseGraphView extends JFrame {
 
 		contentPane.add(createMainToolBar(), BorderLayout.NORTH);
 		// secondary toolbar for layout parameters
-		// contentPane.add(createSecondaryToolBar(), BorderLayout.EAST);
+		contentPane.add(createSecondaryToolBar(), BorderLayout.SOUTH);
 	}
 
 	/**
@@ -148,7 +148,6 @@ public class MbseGraphView extends JFrame {
 		horizontalSpacingSlide.setMinorTickSpacing(10);
 		horizontalSpacingSlide.setMajorTickSpacing(20);
 		horizontalSpacingSlide.setName("HorizontalSpacing");
-		// horizontalSpacingSlide.addChangeListener(changeListener);
 		toolBar.add(horizontalSpacingSlide);
 
 		toolBar.add(new JLabel("Set vertical spacing"));
@@ -159,15 +158,11 @@ public class MbseGraphView extends JFrame {
 		verticalSpacingSlide.setMinorTickSpacing(10);
 		verticalSpacingSlide.setMajorTickSpacing(20);
 		verticalSpacingSlide.setName("VerticalSpacing");
-		// verticalSpacingSlide.addChangeListener(changeListener);
 		toolBar.add(verticalSpacingSlide);
 
 		toolBar.addSeparator();
 		sameOrigin = new JCheckBox("Same origin for edges");
 		toolBar.add(sameOrigin);
-
-		// horizontalSpacingSlide.addChangeListener(changeListener);
-		// verticalSpacingSlide.addChangeListener(changeListener);
 
 		return toolBar;
 	}
@@ -229,6 +224,9 @@ public class MbseGraphView extends JFrame {
 	public void addInputControl(ActionListener actionListener, ChangeListener changeListener,
 			MouseListener mouseListener) {
 		graphComponent.getGraphControl().addMouseListener(mouseListener);
+
+		horizontalSpacingSlide.addChangeListener(changeListener);
+		verticalSpacingSlide.addChangeListener(changeListener);
 
 		btnSaveAs.addActionListener(actionListener);
 		changeStyle.addActionListener(actionListener);

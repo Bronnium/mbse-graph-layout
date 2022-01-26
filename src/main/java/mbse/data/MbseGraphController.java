@@ -64,9 +64,9 @@ public class MbseGraphController {
 	 * Display the user interface
 	 */
 	public void displayView() {
-		model.setCellsMovable(true);
+		// model.setCellsMovable(true);
 		model.getAppliedLayout().execute(model.getDefaultParent());
-		model.setCellsMovable(false);
+		// model.setCellsMovable(false);
 		view.setVisible(true);
 	}
 
@@ -99,7 +99,6 @@ public class MbseGraphController {
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					rightClickMenu(e);
 				}
-
 			}
 		};
 
@@ -180,17 +179,16 @@ public class MbseGraphController {
 				// ((MbseLayout) currentAppliedLayout).setHorizontalSpacing(spacing);
 				mxCompactTreeLayout layout = ((mxCompactTreeLayout) model.getAppliedLayout());
 				layout.setLevelDistance(spacing);
-				// model.getAppliedLayout().setHorizontalSpacing(spacing);
 
 			} else // verticalSpacing
 			{
-				// model.getAppliedLayout().setVerticalSpacing(spacing);
-				// ((MbseLayout) currentAppliedLayout).setVerticalSpacing(spacing);
+				mxCompactTreeLayout layout = ((mxCompactTreeLayout) model.getAppliedLayout());
+				layout.setNodeDistance(spacing);
 			}
 
-			model.setCellsMovable(true);
+			// model.setCellsMovable(true);
 			model.getAppliedLayout().execute(model.getDefaultParent());
-			model.setCellsMovable(false);
+			// model.setCellsMovable(false);
 		}
 	}
 
@@ -212,6 +210,7 @@ public class MbseGraphController {
 					ImageIO.write(image, "PNG", file);
 
 					JOptionPane.showMessageDialog(view, "File has been created");
+					java.awt.Desktop.getDesktop().open(file);
 
 				} catch (IOException e) {
 					log.log(Level.SEVERE, "Failed to create image file.", e);
@@ -245,9 +244,9 @@ public class MbseGraphController {
 		model.getModel().beginUpdate();
 		try {
 			RootLayout rootLayout = new RootLayout(model);
-			model.setCellsMovable(true);
+			// model.setCellsMovable(true);
 			rootLayout.execute(model.getSelectionCell());
-			model.setCellsMovable(false);
+			// model.setCellsMovable(false);
 		} finally {
 			model.getModel().endUpdate();
 		}
@@ -276,9 +275,9 @@ public class MbseGraphController {
 			});
 
 			model.toggleCells(true, cellsAffected.toArray(), true/* includeEdges */);
-			model.setCellsMovable(true);
+			// model.setCellsMovable(true);
 			model.appliedLayout.execute(model.getDefaultParent());
-			model.setCellsMovable(false);
+			// model.setCellsMovable(false);
 		} finally {
 			// 10, 1.7, 20
 			mxMorphing morph = new mxMorphing(view.graphComponent, 10, 1.7, 20);
@@ -318,9 +317,9 @@ public class MbseGraphController {
 			});
 
 			model.toggleCells(false, cellsAffected.toArray(), true/* includeEdges */);
-			model.setCellsMovable(true);
+			// model.setCellsMovable(true);
 			model.appliedLayout.execute(model.getDefaultParent());
-			model.setCellsMovable(false);
+			// model.setCellsMovable(false);
 		} finally {
 			// Create morphing with defaut parameters, can be tested with: 10, 1.7, 20
 			mxMorphing morph = new mxMorphing(view.graphComponent);
