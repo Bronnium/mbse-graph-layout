@@ -21,14 +21,14 @@ public class RootLayout extends mxCompactTreeLayout {
 
 	@Override
 	public void execute(Object parent) {
-		graph.setCellsMovable(true);
 		super.execute(parent);
 
 		ArrayList<Object> roots = new ArrayList<Object>();
 
 		graph.traverse(parent, true, new mxICellVisitor() {
 			public boolean visit(Object vertex, Object edge) {
-				roots.add(vertex);
+				if (((mxCell) vertex).isVisible())
+					roots.add(vertex);
 				return true;
 			}
 		});
@@ -52,7 +52,6 @@ public class RootLayout extends mxCompactTreeLayout {
 			rearrangeEdges();
 
 		} finally {
-			graph.setCellsMovable(false);
 			graph.getModel().endUpdate();
 		}
 	}
