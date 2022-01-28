@@ -8,10 +8,8 @@ import javax.swing.UIManager;
 
 public class GraphVisualizer {
 	private static final Logger log = Logger.getLogger(GraphVisualizer.class.getName());
-	private static HashSet<String> nodes;
-	private static HashSet edges;
 
-	public static void main(String[] args) {
+	public GraphVisualizer() {
 
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -20,7 +18,7 @@ public class GraphVisualizer {
 		}
 
 		// create an instance of a MBSE model
-		MbseGraphModel mbseGraphModel = new MbseGraphModel(true);
+		MbseGraphModel mbseGraphModel = new MbseGraphModel();
 
 		// create an instance of a Mbse View
 		MbseGraphView mbseGraphView = new MbseGraphView();
@@ -31,15 +29,22 @@ public class GraphVisualizer {
 		mbseGraphController.displayView();
 	}
 
-	public static void createDummyData() {
-		nodes = new HashSet<>();
+	public GraphVisualizer(HashSet<GraphNode> nodes, HashSet<GraphEdge> edges) {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+			log.log(Level.SEVERE, "Failed set look and feel user interface.", e);
+		}
 
-		nodes.add("root");
-		nodes.add("Child 1");
-		nodes.add("Child 2");
-		nodes.add("Child 3");
+		// create an instance of a MBSE model
+		MbseGraphModel mbseGraphModel = new MbseGraphModel(nodes, edges);
 
-		edges = new HashSet<>();
+		// create an instance of a Mbse View
+		MbseGraphView mbseGraphView = new MbseGraphView();
 
+		// creates an instance of a MBSE Controller
+		MbseGraphController mbseGraphController = new MbseGraphController(mbseGraphModel, mbseGraphView);
+
+		mbseGraphController.displayView();
 	}
 }

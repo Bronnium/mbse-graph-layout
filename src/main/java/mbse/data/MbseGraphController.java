@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
@@ -26,6 +25,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.mxgraph.layout.mxCompactTreeLayout;
+import com.mxgraph.model.mxCell;
 import com.mxgraph.swing.mxGraphComponent;
 import com.mxgraph.swing.mxGraphComponent.mxGraphControl;
 import com.mxgraph.swing.util.mxMorphing;
@@ -64,9 +64,7 @@ public class MbseGraphController {
 	 * Display the user interface
 	 */
 	public void displayView() {
-		// model.setCellsMovable(true);
 		model.getAppliedLayout().execute(model.getDefaultParent());
-		// model.setCellsMovable(false);
 		view.setVisible(true);
 	}
 
@@ -105,23 +103,55 @@ public class MbseGraphController {
 		view.addInputControl(actionListener, changeListener, mouseListener);
 	}
 
+	private void sameOriginControl(boolean b) {
+		if (b) {
+			model.setAppliedLayout(new StructureLayout(model, false));
+		} else {
+			model.setAppliedLayout(new mxCompactTreeLayout(model, false));
+		}
+
+		model.getModel().beginUpdate();
+		try {
+			model.getAppliedLayout().execute(model.getDefaultParent());
+		} finally {
+			model.getModel().endUpdate();
+		}
+
+	}
+
 	private void createChangeStyleControl() {
 		ActionListener actionListenerBox = new ActionListener() {
-			public void actionPerformed(ActionEvent actionEvent) {
+			public void actionPerformed(ActionEvent e) {
 
-				JCheckBox checkBox = (JCheckBox) actionEvent.getSource();
+				JCheckBox checkBox = (JCheckBox) e.getSource();
 
-				if (checkBox.isSelected()) {
-					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
-					model.setCellStyle("saeml", allVertex);
-				} else {
-					Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
-					model.setCellStyle("tom_sawyer", allVertex);
+				switch (checkBox.getActionCommand()) {
+					case "SameOrigin":
+						sameOriginControl(checkBox.isSelected());
+						break;
+					case "ChangeStyle":
+						changeStyleControl(checkBox.isSelected());
+						break;
+					default:
+
 				}
+
 			}
+
 		};
 
-		view.changeStyle.addActionListener(actionListenerBox);
+		view.addCheckBoxControls(actionListenerBox);
+	}
+
+	private void changeStyleControl(boolean b) {
+
+		if (b) {
+			Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
+			model.setCellStyle("saeml", allVertex);
+		} else {
+			Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
+			model.setCellStyle("tom_sawyer", allVertex);
+		}
 	}
 
 	/**
@@ -186,38 +216,19 @@ public class MbseGraphController {
 				layout.setNodeDistance(spacing);
 			}
 
-			// model.setCellsMovable(true);
 			model.getAppliedLayout().execute(model.getDefaultParent());
-			// model.setCellsMovable(false);
 		}
 	}
 
 	private void linkBtnAndLabel(ActionEvent event) {
 
-		if (event.getSource() instanceof JButton) {
-
-			// Create a file chooser
-			final JFileChooser fc = new JFileChooser();
-			FileFilter filter = new FileNameExtensionFilter("PNG Images", "png");
-			fc.setFileFilter(filter);
-
-			int returnVal = fc.showOpenDialog(view);
-
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				File file = fc.getSelectedFile();
-				BufferedImage image = mxCellRenderer.createBufferedImage(model, null, 1, Color.WHITE, true, null);
-				try {
-					ImageIO.write(image, "PNG", file);
-
-					JOptionPane.showMessageDialog(view, "File has been created");
-					java.awt.Desktop.getDesktop().open(file);
-
-				} catch (IOException e) {
-					log.log(Level.SEVERE, "Failed to create image file.", e);
-				}
-			} else {
-
-			}
+		switch (event.getActionCommand()) {
+			case "export":
+				exportGraphgeometry();
+				break;
+			case "image":
+				exportImage();
+			default:
 
 		}
 
@@ -240,16 +251,69 @@ public class MbseGraphController {
 		}
 	}
 
+	private void exportImage() {
+		// Create a file chooser
+		final JFileChooser fc = new JFileChooser();
+		FileFilter filter = new FileNameExtensionFilter("PNG Images", "png");
+		fc.setFileFilter(filter);
+
+		int returnVal = fc.showOpenDialog(view);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = fc.getSelectedFile();
+			BufferedImage image = mxCellRenderer.createBufferedImage(model, null, 1, Color.WHITE, true, null);
+			try {
+				ImageIO.write(image, "PNG", file);
+
+				JOptionPane.showMessageDialog(view, "File has been created");
+				java.awt.Desktop.getDesktop().open(file);
+
+			} catch (IOException e) {
+				log.log(Level.SEVERE, "Failed to create image file.", e);
+			}
+		} else {
+
+		}
+
+	}
+
+	private void exportGraphgeometry() {
+		System.out.println("export");
+		Object[] resutl = model.getChildCells(model.getDefaultParent(), true, true);
+		System.out.println(resutl);
+		for (Object obj : resutl) {
+			mxCell cell = (mxCell) obj;
+			if (cell.isVertex()) {
+				GraphNode node = model.nodesTable.get(cell);
+				System.out.println(node);
+				node.setGeometry(cell.getGeometry());
+			} else {
+				GraphEdge edge = model.edgesTable.get(cell);
+				System.out.println(edge);
+				edge.setGeometry(cell.getGeometry().getPoints());
+			}
+
+		}
+	}
+
 	private void layoutOnSelectedGroup() {
 		model.getModel().beginUpdate();
 		try {
 			RootLayout rootLayout = new RootLayout(model);
-			// model.setCellsMovable(true);
 			rootLayout.execute(model.getSelectionCell());
-			// model.setCellsMovable(false);
 		} finally {
-			model.getModel().endUpdate();
+			mxMorphing morph = new mxMorphing(view.graphComponent, 20, 1.5, 20);
+			morph.addListener(mxEvent.DONE, new mxIEventListener() {
+
+				@Override
+				public void invoke(Object sender, mxEventObject evt) {
+					model.getModel().endUpdate();
+				}
+			});
+			morph.startAnimation();
+			view.graphComponent.refresh();
 		}
+
 	}
 
 	private void expandAction() {
@@ -275,9 +339,7 @@ public class MbseGraphController {
 			});
 
 			model.toggleCells(true, cellsAffected.toArray(), true/* includeEdges */);
-			// model.setCellsMovable(true);
 			model.appliedLayout.execute(model.getDefaultParent());
-			// model.setCellsMovable(false);
 		} finally {
 			// 10, 1.7, 20
 			mxMorphing morph = new mxMorphing(view.graphComponent, 10, 1.7, 20);
@@ -287,6 +349,7 @@ public class MbseGraphController {
 				public void invoke(Object sender, mxEventObject evt) {
 					model.getModel().endUpdate();
 				}
+
 			});
 			morph.startAnimation();
 			view.graphComponent.refresh();
@@ -317,9 +380,7 @@ public class MbseGraphController {
 			});
 
 			model.toggleCells(false, cellsAffected.toArray(), true/* includeEdges */);
-			// model.setCellsMovable(true);
 			model.appliedLayout.execute(model.getDefaultParent());
-			// model.setCellsMovable(false);
 		} finally {
 			// Create morphing with defaut parameters, can be tested with: 10, 1.7, 20
 			mxMorphing morph = new mxMorphing(view.graphComponent);

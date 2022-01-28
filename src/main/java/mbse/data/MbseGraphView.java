@@ -78,6 +78,8 @@ public class MbseGraphView extends JFrame {
 
 	private JMenuItem expand;
 
+	private JButton btnExport = new JButton("Export to", new ImageIcon(getClass().getResource("/export.png")));
+
 	/**
 	 * Documentation of the MbseGraphView
 	 */
@@ -162,6 +164,7 @@ public class MbseGraphView extends JFrame {
 
 		toolBar.addSeparator();
 		sameOrigin = new JCheckBox("Same origin for edges");
+		sameOrigin.setActionCommand("SameOrigin");
 		toolBar.add(sameOrigin);
 
 		return toolBar;
@@ -196,12 +199,14 @@ public class MbseGraphView extends JFrame {
 		toolBar.addSeparator();
 
 		changeStyle = new JCheckBox("Classic style");
+		changeStyle.setActionCommand("ChangeStyle");
 		toolBar.add(changeStyle);
 
 		toolBar.addSeparator();
 
 		btnSaveAs = new JButton(new ImageIcon(getClass().getResource("/saveas.gif")));
 		btnSaveAs.setToolTipText("export as image");
+		btnSaveAs.setActionCommand("image");
 		toolBar.add(btnSaveAs);
 
 		toolBar.addSeparator();
@@ -212,6 +217,10 @@ public class MbseGraphView extends JFrame {
 
 		// layoutSelection
 		toolBar.add(layoutSelection);
+
+		toolBar.addSeparator();
+		btnExport.setActionCommand("export");
+		toolBar.add(btnExport);
 
 		return toolBar;
 	}
@@ -230,6 +239,7 @@ public class MbseGraphView extends JFrame {
 
 		btnSaveAs.addActionListener(actionListener);
 		changeStyle.addActionListener(actionListener);
+		btnExport.addActionListener(actionListener);
 
 		layoutSelection.addActionListener(actionListener);
 
@@ -259,6 +269,12 @@ public class MbseGraphView extends JFrame {
 		btnZoomOut.setActionCommand("zoomOut");
 		btnZoomFit.addActionListener(zoomActionListener);
 		btnZoomFit.setActionCommand("zoomFit");
+	}
+
+	public void addCheckBoxControls(ActionListener actionListenerBox) {
+
+		changeStyle.addActionListener(actionListenerBox);
+		sameOrigin.addActionListener(actionListenerBox);
 	}
 
 }
