@@ -3,7 +3,7 @@ package mbse.data;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,81 +25,81 @@ public class MbseGraphStyles {
 
     private static final Logger log = Logger.getLogger(MbseGraphStyles.class.getName());
 
-    private final static String STYLES_PATH = "/styles.xml";
+    private static final String DEFAULT_STYLES_FILE = "styles.xml";
 
-    private HashMap<String, HashMap<String, Object>> mapStyleHashtable = new HashMap<String, HashMap<String, Object>>();
+    private Map<String, Map<String, String>> mapStyleHashtable = new HashMap<>();
 
-    private File file;
+    // private File file;
 
     /**
      * Constructor with MBSE default style parameters
      */
     public MbseGraphStyles() {
-        String path = MbseGraphStyles.class.getResource(STYLES_PATH).getPath();
-        loadAndReadFile(path);
-    }
-
-    public MbseGraphStyles(String string) {
-        String path = "";
-        if (string.startsWith("/")) {
-            path = MbseGraphStyles.class.getResource(string).getPath();
-        }
+        String path = MbseGraphStyles.class.getResource("/" + DEFAULT_STYLES_FILE).getPath();
 
         loadAndReadFile(path);
     }
 
-    private void importedCode() throws ParserConfigurationException, SAXException, IOException {
-        String styleName = "";
-        // an instance of factory that gives a document builder
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        // to be compliant, completely disable DOCTYPE declaration:
-        dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-        // an instance of builder to parse the specified xml file
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document doc = db.parse(file);
-        doc.getDocumentElement().normalize();
-        NodeList nodeList = doc.getElementsByTagName("style");
-        // nodeList is not iterable, so we are using for loop
-        for (int itr = 0; itr < nodeList.getLength(); itr++) {
-            Element nNode = (Element) nodeList.item(itr);
-            styleName = nNode.getAttribute("name"); // tom sawyer, saeml etc....
-
-            HashMap<String, Object> stylesTable = new HashMap<String, Object>();
-
-            NodeList childNodes = nNode.getChildNodes();
-
-            for (int j = 0; j < childNodes.getLength(); j++) {
-                Node node = childNodes.item(j);
-                NamedNodeMap attributes = node.getAttributes();
-                if (attributes != null) {
-                    Node child = attributes.item(0);
-                    stylesTable.put(node.getNodeName(), child.getFirstChild().getTextContent());
-                }
-            }
-
-            mapStyleHashtable.put(styleName, stylesTable);
-        }
-    }
-
-    public HashMap<String, HashMap<String, Object>> getAvailableStyles() {
+    /**
+     * After the constructor, this function with return a dictionnary of styles
+     * 
+     * @return dictionnary of available styles extracted from XML file
+     */
+    public Map<String, Map<String, String>> getAvailableStyles() {
         return mapStyleHashtable;
     }
 
     /**
-     * Load and read the content of a file with default file
-     * Update <code>fileContent</code> variable
-     * 
-     * @return String - content or EMPTY if file not readable
+     * Load and read the content of a default file
      */
-    public boolean loadAndReadFile(String path) {
-        file = new File(path);
+    private void loadAndReadFile(String path) {
+        File file = new File(path);
+        if (file.exists())
+            parseXMLFile(file);
+    }
+
+    /**
+     * Read XML file and create the dictionnary
+     * 
+     * @param file - path to existing file
+     */
+    private void parseXMLFile(File file) {
+        String styleName = "";
+        // creates an instance of factory that gives a document builder
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
         try {
-            importedCode();
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            log.log(Level.SEVERE, "File not found.", e);
-        }
+            // to be compliant, completely disable DOCTYPE declaration:
+            dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 
-        return file.exists();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+
+            Document doc = db.parse(file);
+
+            doc.getDocumentElement().normalize();
+
+            NodeList nodeList = doc.getElementsByTagName("style");
+            // nodeList is not iterable, so we are using for loop
+            for (int itr = 0; itr < nodeList.getLength(); itr++) {
+                Element nNode = (Element) nodeList.item(itr);
+                styleName = nNode.getAttribute("name"); // tom sawyer, saeml, etc....
+
+                // a style is found shall define properties
+                NodeList childNodes = nNode.getChildNodes();
+
+                HashMap<String, String> stylesTable = new HashMap<>(); // will store each property and value
+                for (int j = 0; j < childNodes.getLength(); j++) {
+                    Node node = childNodes.item(j);
+                    NamedNodeMap attributes = node.getAttributes();
+                    if (attributes != null) {
+                        Node child = attributes.item(0);
+                        stylesTable.put(node.getNodeName(), child.getFirstChild().getTextContent());
+                    }
+                }
+                mapStyleHashtable.put(styleName, stylesTable);
+            }
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            log.log(Level.SEVERE, "Parsing xml file failed.", e);
+        }
     }
 }

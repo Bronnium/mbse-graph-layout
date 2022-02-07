@@ -2,30 +2,23 @@ package mbse.data;
 
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
+import java.util.Map;
+
 import org.junit.Test;
 
 public class TestMbseGraphStyles {
 
-    // object is being mocked initialized before each test method
     private MbseGraphStyles graphStyles;
 
-    @Before
-    public void setUp() {
-        // graphStyles = Mockito.mock(MbseGraphStyles.class);
-        graphStyles = new MbseGraphStyles();
-    }
-
-    /** Test if file is found */
     @Test
-    public void testLoadFileExists() {
+    public void getAvailableStylesTest() {
         // arrange
-        // String path = TestMbseGraphStyles.class.getResource("file.xml").getPath();
-
+        graphStyles = new MbseGraphStyles();
         // act
-        // boolean found = graphStyles.loadAndReadFile(path);
+        Map<String, Map<String, String>> output = graphStyles.getAvailableStyles();
 
         // assert
-        assertTrue("File is found", true);
+        assertTrue("The default styles has not been founded.", output.size() > 0);
+
     }
 }

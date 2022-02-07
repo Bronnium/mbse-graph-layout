@@ -3,6 +3,7 @@ package mbse.data;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.mxgraph.layout.mxCompactTreeLayout;
 import com.mxgraph.layout.mxGraphLayout;
@@ -63,33 +64,6 @@ public class MbseGraphModel extends mxGraph {
         style2.put(mxConstants.STYLE_FILLCOLOR, "none");
         style2.put(mxConstants.STYLE_FOLDABLE, false);
         getStylesheet().putCellStyle("column", style2);
-
-        MbseGraphModel g = this;
-        mxLayoutManager layoutMgr = new mxLayoutManager(this) {
-
-            mxStackLayout layout = new mxStackLayout(g, true);
-
-            public mxIGraphLayout getLayout(Object parent) {
-
-                mxCell cell = (mxCell) parent;
-                if (!cell.isCollapsed()) {
-                    if (cell.getParent() != graph.getCurrentRoot()) {
-                        // layout.resizeParent = true;
-                        // layout.horizontal = false;
-                        // layout.set = 10;
-                    } else {
-                        // layout.resizeParent = true;
-                        // layout.horizontal = true;
-                        // layout.spacing = 40;
-                    }
-
-                    return layout;
-                }
-
-                return null;
-            }
-        };
-        // layoutMgr.
 
         // https://jgraph.github.io/mxgraph/javascript/examples/layers.html - filtrage
         // des données visibles
@@ -166,7 +140,7 @@ public class MbseGraphModel extends mxGraph {
 
         MbseGraphStyles mbseStyles = new MbseGraphStyles();
 
-        HashMap<String, HashMap<String, Object>> styles = mbseStyles.getAvailableStyles();
+        HashMap<String, HashMap<String, Object>> styles = (HashMap) mbseStyles.getAvailableStyles();
 
         styles.forEach(
                 (k, v) -> this.getStylesheet().putCellStyle(k, v));
@@ -201,7 +175,7 @@ public class MbseGraphModel extends mxGraph {
         }
     }
 
-    public MbseGraphModel(HashSet<GraphNode> nodes, HashSet<GraphEdge> edges) {
+    public MbseGraphModel(Set<GraphNode> nodes, Set<GraphEdge> edges) {
         super();
 
         setBorder(20);
@@ -213,7 +187,7 @@ public class MbseGraphModel extends mxGraph {
 
         MbseGraphStyles mbseStyles = new MbseGraphStyles();
 
-        HashMap<String, HashMap<String, Object>> styles = mbseStyles.getAvailableStyles();
+        HashMap<String, HashMap<String, Object>> styles = (HashMap) mbseStyles.getAvailableStyles();
 
         styles.forEach(
                 (k, v) -> this.getStylesheet().putCellStyle(k, v));
