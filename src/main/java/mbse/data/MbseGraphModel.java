@@ -26,7 +26,7 @@ public class MbseGraphModel extends mxGraph {
 
     private static String defaultStyle = "tom_sawyer";
 
-    public String[] availableLayouts = new String[] { "Hierarchical layout" };
+    public String[] availableLayouts = new String[] { "Breakdown Structure Layout" };
 
     /**
      * Model for complex data

@@ -31,11 +31,13 @@ public class GraphVisualizer {
 		// create an instance of a MBSE model
 		MbseGraphModel mbseGraphModel = new MbseGraphModel(nodes, edges);
 
-		// create an instance of a MBSE View
-		MbseGraphView mbseGraphView = new MbseGraphView();
-
 		// creates an instance of a MBSE Controller
-		MbseGraphController mbseGraphController = new MbseGraphController(mbseGraphModel, mbseGraphView);
+		MbseGraphController mbseGraphController = new MbseGraphController(mbseGraphModel);
+
+		// create an instance of a MBSE View
+		MbseGraphView mbseGraphView = new MbseGraphView(mbseGraphController);
+
+		mbseGraphController.setView(mbseGraphView);
 
 		mbseGraphController.displayView();
 	}

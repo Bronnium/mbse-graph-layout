@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JToolBar;
 import javax.swing.event.ChangeListener;
 
@@ -28,20 +28,14 @@ import com.mxgraph.swing.mxGraphComponent;
  */
 public class MbseGraphView extends JFrame {
 
-	public JComboBox<Object> getLayoutSelection() {
-		return layoutSelection;
-	}
-
-	public void setLayoutSelection(JComboBox<Object> layoutSelection) {
-		this.layoutSelection = layoutSelection;
-	}
-
 	private JPanel contentPane;
 
 	private JButton btnZoomIn;
 	private JButton btnZoomOut;
 	private JButton btnZoomFit;
-	private JSlider horizontalSpacingSlide, verticalSpacingSlide;
+
+	private JSpinner horizontalSpacingSlide;
+	private JSpinner verticalSpacingSlide;
 
 	// graphical component for MbseGraph
 	protected mxGraphComponent graphComponent;
@@ -52,23 +46,17 @@ public class MbseGraphView extends JFrame {
 
 	protected JCheckBox changeStyle;
 
-	private JMenuItem lock;
-
 	private JMenuItem displayAsLeaf;
 
 	/**
 	 * Contains the path to icon that will be displayed in the frame.
 	 * Image file (png) shall be included in resources package
 	 */
-	private final String ICO_STRING = "/flow-chart.png";
-	private static final String FRAME_TITLE = "MBSE Graph Visualizer";
+	private final static String ICO_STRING = "/flow-chart.png";
+	private final static String FRAME_TITLE = "MBSE Graph Visualizer";
 
 	private final int FRAME_WIDTH = 800;
 	private final int FRAME_HEIGHT = 600;
-
-	private JButton btnSelect;
-
-	private JButton btnPan;
 
 	private JButton btnSaveAs;
 
@@ -80,11 +68,15 @@ public class MbseGraphView extends JFrame {
 
 	private JButton btnExport = new JButton("Export to", new ImageIcon(getClass().getResource("/export.png")));
 
+	private MbseGraphController controller;
+
 	/**
 	 * Documentation of the MbseGraphView
 	 */
-	public MbseGraphView() {
+	public MbseGraphView(MbseGraphController controller) {
 		super(FRAME_TITLE);
+
+		this.controller = controller;
 
 		// sets size
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -123,13 +115,10 @@ public class MbseGraphView extends JFrame {
 		displayAsLeaf = new JMenuItem("display as leafs");
 		displayAsLeaf.setIcon(new ImageIcon(getClass().getResource("/tree-structure.png")));
 
-		// lock = new JMenuItem("Lock / Unlock", new
-		// ImageIcon(getClass().getResource("/padlock.png")));
 		collapse = new JMenuItem("Collapse", new ImageIcon(getClass().getResource("/collapse.gif")));
 		expand = new JMenuItem("Expand", new ImageIcon(getClass().getResource("/expand.gif")));
 
 		popupmenu.add(displayAsLeaf);
-		// popupmenu.add(lock);
 		popupmenu.addSeparator();
 		popupmenu.add(collapse);
 		popupmenu.add(expand);
@@ -137,34 +126,29 @@ public class MbseGraphView extends JFrame {
 	}
 
 	private Component createSecondaryToolBar() {
-		JToolBar toolBar = new JToolBar("Layout Properties", JToolBar.VERTICAL);
+		JToolBar toolBar = new JToolBar("Layout Properties");
 
 		// empeche la barre d'etre bougée
 		toolBar.setFloatable(true);
 
 		toolBar.add(new JLabel("Set horizontal spacing"));
 
-		horizontalSpacingSlide = new JSlider(JSlider.HORIZONTAL, 5, 100, 20);
-		horizontalSpacingSlide.setPaintTicks(true);
-		horizontalSpacingSlide.setPaintLabels(true);
-		horizontalSpacingSlide.setMinorTickSpacing(10);
-		horizontalSpacingSlide.setMajorTickSpacing(20);
+		horizontalSpacingSlide = new JSpinner();
+		horizontalSpacingSlide.setValue(10);
 		horizontalSpacingSlide.setName("HorizontalSpacing");
 		toolBar.add(horizontalSpacingSlide);
 
 		toolBar.add(new JLabel("Set vertical spacing"));
 
-		verticalSpacingSlide = new JSlider(JSlider.HORIZONTAL, 5, 100, 20);
-		verticalSpacingSlide.setPaintTicks(true);
-		verticalSpacingSlide.setPaintLabels(true);
-		verticalSpacingSlide.setMinorTickSpacing(10);
-		verticalSpacingSlide.setMajorTickSpacing(20);
+		verticalSpacingSlide = new JSpinner();
+		verticalSpacingSlide.setValue(20);
 		verticalSpacingSlide.setName("VerticalSpacing");
 		toolBar.add(verticalSpacingSlide);
 
 		toolBar.addSeparator();
 		sameOrigin = new JCheckBox("Same origin for edges");
-		sameOrigin.setActionCommand("SameOrigin");
+
+		sameOrigin.addActionListener(e -> controller.sameOriginControl(sameOrigin.isSelected()));
 		toolBar.add(sameOrigin);
 
 		return toolBar;
@@ -176,16 +160,7 @@ public class MbseGraphView extends JFrame {
 
 		// empeche la barre d'etre bougée
 		toolBar.setFloatable(false);
-		/*
-		 * btnSelect = new JButton(new
-		 * ImageIcon(getClass().getResource("/select.gif")));
-		 * toolBar.add(btnSelect);
-		 * 
-		 * btnPan = new JButton(new ImageIcon(getClass().getResource("/pan.gif")));
-		 * toolBar.add(btnPan);
-		 * 
-		 * toolBar.addSeparator();
-		 */
+
 		btnZoomIn = new JButton(new ImageIcon(getClass().getResource("/zoomin.gif")));
 		btnZoomIn.setToolTipText("zoom in");
 		toolBar.add(btnZoomIn);
@@ -196,10 +171,12 @@ public class MbseGraphView extends JFrame {
 		btnZoomFit.setToolTipText("zoom fit");
 		toolBar.add(btnZoomFit);
 
+		createAndAddZoomControls();
+
 		toolBar.addSeparator();
 
 		changeStyle = new JCheckBox("Classic style");
-		changeStyle.setActionCommand("ChangeStyle");
+		changeStyle.addActionListener(e -> controller.changeStyle(changeStyle.isSelected()));
 		toolBar.add(changeStyle);
 
 		toolBar.addSeparator();
@@ -215,7 +192,6 @@ public class MbseGraphView extends JFrame {
 		layoutSelection = new JComboBox<Object>();
 		layoutSelection.setPreferredSize(layoutSelection.getPreferredSize());
 
-		// layoutSelection
 		toolBar.add(layoutSelection);
 
 		toolBar.addSeparator();
@@ -230,51 +206,39 @@ public class MbseGraphView extends JFrame {
 		contentPane.add(graphComponent);
 	}
 
-	public void addInputControl(ActionListener actionListener, ChangeListener changeListener,
-			MouseListener mouseListener) {
+	public void addInputControl(MouseListener mouseListener) {
 		graphComponent.getGraphControl().addMouseListener(mouseListener);
 
-		horizontalSpacingSlide.addChangeListener(changeListener);
-		verticalSpacingSlide.addChangeListener(changeListener);
+		horizontalSpacingSlide
+				.addChangeListener(cl -> controller.changedSpacing((int) verticalSpacingSlide.getValue(), true));
+		verticalSpacingSlide
+				.addChangeListener(cl -> controller.changedSpacing((int) verticalSpacingSlide.getValue(), false));
 
-		btnSaveAs.addActionListener(actionListener);
-		changeStyle.addActionListener(actionListener);
-		btnExport.addActionListener(actionListener);
-
-		layoutSelection.addActionListener(actionListener);
+		btnSaveAs.addActionListener(al -> controller.exportImage());
+		btnExport.addActionListener(al -> controller.exportGraphGeometry());
 
 		// right click menu
-		displayAsLeaf.addActionListener(actionListener);
-		collapse.addActionListener(actionListener);
-		expand.addActionListener(actionListener);
+		displayAsLeaf.addActionListener(al -> controller.layoutOnSelectedGroup());
+		collapse.addActionListener(al -> controller.collapseAction());
+		expand.addActionListener(al -> controller.expandAction());
 	}
 
 	public void displayPopupMenu(int x, int y) {
 		popupmenu.show(graphComponent, x, y);
 	}
 
-	public void resizeCombox() {
-		// layoutSelection.setMaximumSize(layoutSelection.getPreferredSize());
-	}
-
-	/**
-	 * Add action listener on Zoom controls (in, out, fit)
-	 * 
-	 * @param zoomActionListener
-	 */
-	public void addZoomControls(ActionListener zoomActionListener) {
-		btnZoomIn.addActionListener(zoomActionListener);
-		btnZoomIn.setActionCommand("zoomIn");
-		btnZoomOut.addActionListener(zoomActionListener);
-		btnZoomOut.setActionCommand("zoomOut");
-		btnZoomFit.addActionListener(zoomActionListener);
-		btnZoomFit.setActionCommand("zoomFit");
-	}
-
 	public void addCheckBoxControls(ActionListener actionListenerBox) {
 
-		changeStyle.addActionListener(actionListenerBox);
-		sameOrigin.addActionListener(actionListenerBox);
+		// changeStyle.addActionListener(actionListenerBox);
+		// sameOrigin.addActionListener(actionListenerBox);
+		// sameOrigin.addActionListener(e ->
+		// controller.changeStyle(sameOrigin.isSelect);
+	}
+
+	private void createAndAddZoomControls() {
+		btnZoomIn.addActionListener((e) -> graphComponent.zoomIn());
+		btnZoomOut.addActionListener((e) -> graphComponent.zoomOut());
+		btnZoomFit.addActionListener((e) -> graphComponent.zoomActual());
 	}
 
 }
