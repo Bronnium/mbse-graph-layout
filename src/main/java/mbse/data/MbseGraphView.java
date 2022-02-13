@@ -2,7 +2,6 @@ package mbse.data;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
@@ -16,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSpinner;
 import javax.swing.JToolBar;
-import javax.swing.event.ChangeListener;
 
 import com.mxgraph.swing.mxGraphComponent;
 
@@ -183,7 +181,6 @@ public class MbseGraphView extends JFrame {
 
 		btnSaveAs = new JButton(new ImageIcon(getClass().getResource("/saveas.gif")));
 		btnSaveAs.setToolTipText("export as image");
-		btnSaveAs.setActionCommand("image");
 		toolBar.add(btnSaveAs);
 
 		toolBar.addSeparator();
@@ -195,7 +192,6 @@ public class MbseGraphView extends JFrame {
 		toolBar.add(layoutSelection);
 
 		toolBar.addSeparator();
-		btnExport.setActionCommand("export");
 		toolBar.add(btnExport);
 
 		return toolBar;
@@ -225,14 +221,6 @@ public class MbseGraphView extends JFrame {
 
 	public void displayPopupMenu(int x, int y) {
 		popupmenu.show(graphComponent, x, y);
-	}
-
-	public void addCheckBoxControls(ActionListener actionListenerBox) {
-
-		// changeStyle.addActionListener(actionListenerBox);
-		// sameOrigin.addActionListener(actionListenerBox);
-		// sameOrigin.addActionListener(e ->
-		// controller.changeStyle(sameOrigin.isSelect);
 	}
 
 	private void createAndAddZoomControls() {

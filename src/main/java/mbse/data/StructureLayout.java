@@ -28,8 +28,6 @@ public class StructureLayout extends mxCompactTreeLayout {
         // Execute the CompactTreeLayout
         super.execute(parent);
 
-        System.out.println("rearrange edges");
-
         // Modify the edges to ensure they exit the source cell at the midpoint
         // get all the vertexes
         Object[] vertexes = ((mxGraphModel) graph.getModel()).getChildVertices(graph.getModel(),

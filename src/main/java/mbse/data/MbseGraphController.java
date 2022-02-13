@@ -43,12 +43,12 @@ public class MbseGraphController implements MbseGraphControllerInterface {
 
 	private MbseGraphModel model;
 
+	/**
+	 * Constructor responsible for defining state of the class
+	 */
 	public MbseGraphController(MbseGraphModel mbseGraphModel, MbseGraphView mbseGraphView) {
 		model = mbseGraphModel;
 		view = mbseGraphView;
-
-		view.addMbseGraphComponent(model);
-		addViewControls();
 	}
 
 	public MbseGraphController(MbseGraphModel mbseGraphModel) {
@@ -83,21 +83,32 @@ public class MbseGraphController implements MbseGraphControllerInterface {
 		view.addInputControl(mouseListener);
 	}
 
+	/**
+	 * When multiples edges exits from edge, the same exit point is used
+	 * 
+	 * @param sameExit - boolean
+	 */
 	@Override
-	public void sameOriginControl(boolean b) {
-		if (b) {
+	public void sameOriginControl(boolean sameExit) {
+		if (sameExit) {
 			model.setAppliedLayout(new StructureLayout(model, false));
 		} else {
 			model.setAppliedLayout(new mxCompactTreeLayout(model, false));
 		}
 
+		updateLayout();
+	}
+
+	/**
+	 * Internal function to execute selected layout on the model
+	 */
+	private void updateLayout() {
 		model.getModel().beginUpdate();
 		try {
 			model.getAppliedLayout().execute(model.getDefaultParent());
 		} finally {
 			model.getModel().endUpdate();
 		}
-
 	}
 
 	public void rightClickMenu(MouseEvent e) {
@@ -124,7 +135,7 @@ public class MbseGraphController implements MbseGraphControllerInterface {
 			layout.setNodeDistance(spacing);
 		}
 
-		model.getAppliedLayout().execute(model.getDefaultParent());
+		updateLayout();
 	}
 
 	/**
@@ -272,14 +283,18 @@ public class MbseGraphController implements MbseGraphControllerInterface {
 		}
 	}
 
+	/**
+	 * Change style and displays images in boxes
+	 * 
+	 * @param style - SaeML if true, Tom Sawyer otherwise
+	 */
 	@Override
 	public void changeStyle(boolean style) {
 		if (style) {
-			Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
-			model.setCellStyle("saeml", allVertex);
+			model.setAppliedStyle("saeml");
 		} else {
-			Object[] allVertex = model.getChildCells(model.getDefaultParent(), true, false);
-			model.setCellStyle("tom_sawyer", allVertex);
+			model.setAppliedStyle("tom_sawyer");
 		}
+		model.updateGraphModel();
 	}
 }
